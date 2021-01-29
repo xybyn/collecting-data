@@ -3,8 +3,11 @@ import requests
 import re
 import os
 import urllib.request
+from DataProcessingPipeline import *
+from CollectionProcessingPipeline import *
+from utils import *
 
-
+from openpyxl import *
 def get_hrefs(url):
     page = requests.get(url)
     soup = BeautifulSoup(page.text, "html.parser")
@@ -82,22 +85,69 @@ def get_archive_year(archive_link):
     return result.split('/')[-1]
 
 
+def get_row(row_html):
+    pass
+
+def get_institutes_with_data(link):
+    page = requests.get(link)
+    page.encoding = page.apparent_encoding
+
+    soup = BeautifulSoup(page.text, "html.parser")
+    a = soup.prettify()
+
+    whole_rows = [inst.parent for inst in  soup.find_all('td', {"class":"inst"})]
+    institutes_with_data = {}
+    for row in whole_rows:
+        institute = row.find("td", {"class": "inst"}).find("a").text
+        data = [td.text for td in  row.find_all("td", {"class":"dkont"})]
+        institutes_with_data[institute] = data
+    return institutes_with_data
+
+def get_table_headers(link):
+    page = requests.get(link)
+    page.encoding = page.apparent_encoding
+    soup = BeautifulSoup(page.text, "html.parser")
+    theader_data = soup.find_all('thead')[0]
+    table_headers = theader_data.contents[3].contents
+    col_pipeline = CollectionProcessingPipeline(table_headers)
+    col_pipeline \
+        .add(remove_slash_n) \
+        .add(remove_tags) \
+        .add(strip) \
+        .add(remove_dash_and_space) \
+        .remove_empty()
+    return col_pipeline.target_collection
+
+
+def get_table(link):
+    headers = get_table_headers(link)
+    institutes = get_institutes_with_data(link)
+
+    return {"headers" : headers, "institutes" : institutes}
+
+
 def miccedu_facade():
-    archive_links = get_archives_links()
+    wb = Workbook()
+    ws = wb.active
+    archive_links = get_archives_links()[0]
     for archive_link in archive_links:
         district_and_area_links = get_district_and_area_links(archive_link)
-        print("-" * 10)
+
         archive_year = get_archive_year(archive_link)
-        print(f"Год: {archive_year}")
-        print("округи: ")
-        print(extract_district_links(district_and_area_links))
-        print("области: ")
-        print(extract_area_links(district_and_area_links))
+        ws.append([archive_year])
+        for area in extract_area_links(district_and_area_links):
+            result = get_table(area)
+            ws.append(['университет'] + result['headers'])
+            for key in result['institutes']:
+                ws.append([key] + result['institutes'][key])
+            wb.save(os.path.join(os.getcwd(), "test.xlsx"))
     pass
 
 
 def main():
-    #miccedu_facade()
-    minobr_facade()
+    miccedu_facade()
+    #minobr_facade()
+    #result = get_table("http://indicators.miccedu.ru/monitoring/2018/_vpo/material.php?type=2&id=10501");
+
 
 main()
