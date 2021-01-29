@@ -14,6 +14,8 @@ class MicceduParser:
         # избавляемся от лишних символов 'index.php?...'
         cleared_link = link[:link.rfind('/')]
         hrefs = get_hrefs(link)
+        if self.get_archive_year(link) == '2015':
+            return [f"{cleared_link}/{region_link}" for region_link in extract_data_from_collection(hrefs, "material\.php.*")]
         return [f"{cleared_link}/{region_link}" for region_link in extract_data_from_collection(hrefs, "\_vpo.*")]
 
     def extract_district_links(self, district_and_area_links):
