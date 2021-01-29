@@ -38,7 +38,12 @@ class MicceduParser:
         # родителя
         # Этот найденный td содержит информацию о названии
         # университета, так же данные по каждому из направлений
-        whole_rows = [inst.parent for inst in soup.find_all('td', {"class": "inst"})]
+
+        #выбираем таблицу с классом an, так как есть еще одна таблица
+        #с университетами, не прошедшими аттестацию, они отображаются в
+        # таблице с классом ifail
+        table_with_data = soup.find("table", {"class":"an"})
+        whole_rows = [inst.parent for inst in table_with_data.find_all('td', {"class": "inst"})]
         institutes_with_data = []
         for row in whole_rows:
             # находим краткое название университета во вложенном тэге a

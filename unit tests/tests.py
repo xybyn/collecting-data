@@ -140,5 +140,102 @@ class MicceduParserTests(unittest.TestCase):
 
         self.assertEqual(results[10][0], 'Филиал АНО ВО "Московский институт государственного управления и права" в Республике Саха (Якутия)')
         self.assertEqual(results[0][5], '201')
+
+    def test_get_institutes_with_data_for_2018_should_return_29_rows_10_columns(self):
+        # arrange
+        test_link = 'http://indicators.miccedu.ru/monitoring/2018/_vpo/material.php?type=2&id=10806'
+        # action
+        results = self.parser.get_institutes_with_data(test_link)
+        # assert
+        self.assertEqual(len(results), 29)
+        self.assertEqual(len(results[0]), 10)
+
+        self.assertEqual(results[5][0],'федеральное государственное бюджетное образовательное учреждение высшего образования «Башкирский государственный медицинский университет» Министерства здравоохранения Российской Федерации')
+        self.assertEqual(results[11][4], '1')
+
+
+    def test_get_institutes_with_data_for_2018_should_return_1_row_10_columns(self):
+        # arrange
+        test_link = 'http://indicators.miccedu.ru/monitoring/2018/_vpo/material.php?type=2&id=11108'
+        # action
+        results = self.parser.get_institutes_with_data(test_link)
+        # assert
+        self.assertEqual(len(results), 1)
+        self.assertEqual(len(results[0]), 10)
+
+        self.assertEqual(results[0][0],'Чукотский филиал федерального государственного автономного образовательного учреждения высшего профессионального образования "Северо-Восточный федеральный университет имени М.К. Аммосова"')
+        self.assertEqual(results[0][2], '91,2')
+
+    def test_get_institutes_with_data_for_2017_should_return_4_rows_10_columns(self):
+        # arrange
+        test_link = 'http://indicators.miccedu.ru/monitoring/2017/_vpo/material.php?type=2&id=11106'
+        # action
+        results = self.parser.get_institutes_with_data(test_link)
+        # assert
+        self.assertEqual(len(results), 4)
+        self.assertEqual(len(results[0]), 10)
+
+        self.assertEqual(results[2][0],'Сахалинский институт железнодорожного транспорта - филиала федерального государственного бюджетного образовательного учреждения высшего образования "Дальневосточный государственный университет путей сообщения" в г. Южно-Сахалинске')
+        self.assertEqual(results[2][2], '118,6')
+
+    def test_get_institutes_with_data_for_2017_should_return_9_rows_10_columns(self):
+        # arrange
+        test_link = 'http://indicators.miccedu.ru/monitoring/2017/_vpo/material.php?type=2&id=10402'
+        # action
+        results = self.parser.get_institutes_with_data(test_link)
+        # assert
+        self.assertEqual(len(results), 9)
+        self.assertEqual(len(results[0]), 10)
+
+        self.assertEqual(results[8][0],'Кировский филиал федерального государственного бюджетного образовательного учреждения высшего образования «Российская академия народного хозяйства и государственной службы при Президенте Российской Федерации»')
+        self.assertEqual(results[8][2], '10,25')
+
+    def test_get_institutes_with_data_for_2016_should_return_12_rows_10_columns(self):
+        # arrange
+        test_link = 'http://indicators.miccedu.ru/monitoring/2016/_vpo/material.php?type=2&id=10402'
+        # action
+        results = self.parser.get_institutes_with_data(test_link)
+        # assert
+        self.assertEqual(len(results), 12)
+        self.assertEqual(len(results[0]), 10)
+
+        self.assertEqual(results[11][0],'Филиал федерального государственного бюджетного образовательного учреждения высшего образования "Вятский государственный университет" в г. Вятские Поляны')
+        self.assertEqual(results[11][5], '21,1')
+
+    def test_get_institutes_with_data_for_2016_should_return_8_rows_10_columns(self):
+        # arrange
+        test_link = 'http://indicators.miccedu.ru/monitoring/2016/_vpo/material.php?type=2&id=10801'
+        # action
+        results = self.parser.get_institutes_with_data(test_link)
+        # assert
+        self.assertEqual(len(results), 8)
+        self.assertEqual(len(results[0]), 10)
+
+        self.assertEqual(results[6][0],'Курганский филиал РАНХиГС')
+        self.assertEqual(results[7][2], '3,5')
+
+    def test_get_institutes_with_data_for_2015_should_return_12_rows_10_columns(self):
+        # arrange
+        test_link = 'http://indicators.miccedu.ru/monitoring/2015/material.php?type=2&id=11004'
+        # action
+        results = self.parser.get_institutes_with_data(test_link)
+        # assert
+        self.assertEqual(len(results), 12)
+        self.assertEqual(len(results[0]), 10)
+
+        self.assertEqual(results[11][0],'филиал федерального государственного бюджетного образовательного учреждения высшего профессионального образования "Российский государственный гуманитарный университет" в г. Улан-Удэ Республики Бурятия')
+        self.assertEqual(results[0][5], '119')
+
+    def test_get_institutes_with_data_for_2015_should_return_17_rows_10_columns(self):
+        # arrange
+        test_link = 'http://indicators.miccedu.ru/monitoring/2015/material.php?type=2&id=10202'
+        # action
+        results = self.parser.get_institutes_with_data(test_link)
+        # assert
+        self.assertEqual(len(results), 17)
+        self.assertEqual(len(results[0]), 10)
+
+        self.assertEqual(results[0][0],'Государственный институт экономики, финансов, права и технологий')
+        self.assertEqual(results[0][5], '1239,4')
 if __name__ == "__main__":
     unittest.main()
