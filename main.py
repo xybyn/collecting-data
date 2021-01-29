@@ -6,55 +6,10 @@ import urllib.request
 from DataProcessingPipeline import *
 from CollectionProcessingPipeline import *
 from utils import *
-
+from MinobrParser import MinobrParser
 from openpyxl import *
-def get_hrefs(url):
-    page = requests.get(url)
-    soup = BeautifulSoup(page.text, "html.parser")
-    hrefs = [a['href'] for a in soup.find_all('a', href=True)]
-    return hrefs
 
 
-def extract_data_from_collection(hrefs, pattern):
-    result = []
-
-    for href in hrefs:
-        regex_result = re.match(pattern, href)
-        if regex_result is not None:
-            result.append(regex_result.group(0))
-    return result
-
-
-def get_file_name(file_path):
-    split_path = file_path.split('/')
-    return split_path[-1]
-
-
-def download_file(url_origin, file_path_on_site, path_to_save):
-    file_name = get_file_name(file_path_on_site)
-    save_path = os.path.join(path_to_save, file_name)
-    full_file_path_on_site = f"{url_origin}{file_path_on_site}"
-    print(f"downloading: {file_name}")
-    urllib.request.urlretrieve(full_file_path_on_site, save_path)
-
-
-# TODO: make parallel
-def download_files(url_origin, file_paths_on_site, path_to_save):
-    for file_path_on_site in file_paths_on_site:
-        download_file(url_origin, file_path_on_site, path_to_save)
-
-
-def minobr_facade():
-    url_origin = "https://minobrnauki.gov.ru"
-    url = "https://minobrnauki.gov.ru/action/stat/highed/";
-    current_directory = os.getcwd()
-    path_to_save = current_directory
-
-    hrefs = get_hrefs(url)
-    file_paths_vpo1 = extract_data_from_collection(hrefs, ".*VPO.1.*(rar|zip)")
-    file_paths_vpo2 = extract_data_from_collection(hrefs, ".*VPO.2.*(rar|zip)")
-    download_files(url_origin, file_paths_vpo1, path_to_save)
-    download_files(url_origin, file_paths_vpo2, path_to_save)
 
 
 def get_archives_links():
@@ -146,7 +101,7 @@ def miccedu_facade():
 
 def main():
     miccedu_facade()
-    #minobr_facade()
+    #MinobrParser().download_both(os.getcwd())
     #result = get_table("http://indicators.miccedu.ru/monitoring/2018/_vpo/material.php?type=2&id=10501");
 
 
