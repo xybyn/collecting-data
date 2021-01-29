@@ -1,7 +1,7 @@
 from MicceduParser import *
+from MinobrParser import *
 def main():
-    save_path = os.path.join(os.getcwd(), "test3.xlsx")
-    MicceduParser().export_to_excel('http://indicators.miccedu.ru/monitoring/2015/', save_path)
+    MinobrParser().download_both_async(os.getcwd())
 
 if __name__ == "__main__":
     main()

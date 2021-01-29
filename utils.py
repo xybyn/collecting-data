@@ -3,7 +3,8 @@ import urllib.request
 import requests
 from bs4 import BeautifulSoup
 import os
-
+from threading import Thread
+import gevent.monkey
 
 def remove_substring(string, substring, replacement):
     if substring in string:
@@ -68,9 +69,24 @@ def download_file(url_origin, file_path_on_site, path_to_save):
     full_file_path_on_site = f"{url_origin}{file_path_on_site}"
     print(f"downloading: {file_name}")
     urllib.request.urlretrieve(full_file_path_on_site, save_path)
+    print(f"downloaded: {file_name}")
 
 
-# TODO: make parallel
 def download_files(url_origin, file_paths_on_site, path_to_save):
     for file_path_on_site in file_paths_on_site:
         download_file(url_origin, file_path_on_site, path_to_save)
+
+def download_files_in_parallel(url_origin, file_paths_on_site, path_to_save):
+    threads = []
+    for file_path_on_site in file_paths_on_site:
+        thread = Thread(target=download_file, args=(url_origin, file_path_on_site, path_to_save))
+        thread.start()
+
+    for thread in threads:
+        thread.join()
+
+def download_files_async(url_origin, file_paths_on_site, path_to_save):
+    gevent.monkey.patch_all()
+
+    jobs = [gevent.spawn(download_file, url_origin, file_path_on_site, path_to_save) for file_path_on_site in file_paths_on_site]
+    gevent.wait(jobs)
