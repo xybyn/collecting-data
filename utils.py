@@ -15,7 +15,6 @@ def remove_slash_n(string):
     return remove_substring(string, '\n', ' ')
 
 
-# [WIP]
 def remove_td(string):
     temp = remove_substring(string, '<td>', ' ')
     return remove_substring(temp, '</td>', ' ')
@@ -25,7 +24,6 @@ def remove_tags(string):
     return re.sub(r'<.*?>', ' ', str(string))
 
 
-# [WIP]
 def remove_br(string):
     return re.sub(r'<br/>', ' ', str(string))
 
@@ -34,7 +32,6 @@ def remove_dash_and_space(string):
     return re.sub(r'-\ ', '', str(string))
 
 
-# [WIP]
 def remove_dash(string):
     return remove_substring(string, '-', ' ')
 

@@ -1,7 +1,6 @@
 import unittest
 from MicceduParser import MicceduParser
 
-
 class MicceduParserTests(unittest.TestCase):
     def setUp(self):
         self.parser = MicceduParser()
