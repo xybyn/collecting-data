@@ -1,5 +1,6 @@
+from CollectionProcessingPipeline import CollectionProcessingPipeline
 from utils import *
-
+from openpyxl import *
 
 class MicceduParser:
     def __init__(self):
@@ -55,3 +56,48 @@ class MicceduParser:
             institutes_with_data.append([institute] + data)
 
         return institutes_with_data
+
+    def get_table_headers(self, link):
+        page = requests.get(link)
+        page.encoding = page.apparent_encoding
+        soup = BeautifulSoup(page.text, "html.parser")
+        theader_data = soup.find_all('thead')[0]
+        table_headers = theader_data.contents[3].contents
+        col_pipeline = CollectionProcessingPipeline(table_headers)
+        col_pipeline \
+            .add(remove_slash_n) \
+            .add(remove_tags) \
+            .add(strip) \
+            .add(remove_dash_and_space) \
+            .remove_empty()
+        return col_pipeline.target_collection
+
+    def export_to_excel(self, archive_link, path):
+        district_and_area_links = self.get_district_and_area_links(archive_link)
+        wb = Workbook()
+        ws = wb.active
+        area_links = self.extract_area_links(district_and_area_links)
+        ws.append([self.get_archive_year(archive_link)] + self.get_table_headers(area_links[0]))
+        for area_link in area_links:
+            print(f"downloading data from {area_link}")
+            institutes = self.get_institutes_with_data(area_link)
+            for institute in institutes:
+                ws.append(institute)
+
+        wb.save(path)
+
+    def export_all_data_to_excel(self, path):
+        wb = Workbook()
+        ws = wb.active
+        for archive_link in self.get_archives_links():
+            district_and_area_links = self.get_district_and_area_links(archive_link)
+            archive_year = self.get_archive_year(archive_link)
+            area_links = self.extract_area_links(district_and_area_links)
+            ws.append([archive_year] + self.get_table_headers(area_links[0]))
+            for area_link in area_links:
+                print(f"downloading data from {area_link}")
+                institutes = self.get_institutes_with_data(area_link)
+                for institute in institutes:
+                    ws.append(institute)
+
+        wb.save(path)

@@ -312,5 +312,6 @@ class MicceduParserTests(unittest.TestCase):
         self.assertEqual(results[0][5], '1239,4')
 
 
+
 if __name__ == "__main__":
     unittest.main()
