@@ -444,6 +444,93 @@ class MicceduParserTests(unittest.TestCase):
         #assert
         pass
 
+    def test_get_general_institute_indicators_and_values_2019_should_return_6_rows_2_columns(self):
+        #arrange
+        indicators_and_values = [
+            ["Дополнительный показатель", "75,99"],
+            ["Заработная плата ППС", "192,9"],
+        ]
+        institute_link = "http://indicators.miccedu.ru/monitoring/2019/_vpo/inst.php?id=1585"
+
+        #act
+        result = self.parser.get_general_institute_indicators_and_values(institute_link)
+
+        #assert
+        self.assertEqual(len(result), 6)
+        self.assertEqual(len(result[0]), 2)
+        for indicator_and_value in indicators_and_values:
+            self.assertTrue(indicator_and_value in result)
+
+    def test_get_general_institute_indicators_and_values_2018_should_return_7_rows_2_columns(self):
+        #arrange
+        indicators_and_values = [
+            ["Финансово-экономическая деятельность", "1959,38"],
+            ["Трудоустройство", "50*"],
+        ]
+        institute_link = "http://indicators.miccedu.ru/monitoring/2018/_vpo/inst.php?id=10000374"
+
+        #act
+        result = self.parser.get_general_institute_indicators_and_values(institute_link)
+
+        #assert
+        self.assertEqual(len(result), 7)
+        self.assertEqual(len(result[0]), 2)
+        for indicator_and_value in indicators_and_values:
+            self.assertTrue(indicator_and_value in result)
+
+    #!!!!
+    def test_get_general_institute_indicators_and_values_2017_should_return_7_rows_2_columns(self):
+        #arrange
+        indicators_and_values = [
+            ["Образовательная деятельность", "53,69"],
+            ["Трудоустройство", "70*"],
+        ]
+        institute_link = "http://indicators.miccedu.ru/monitoring/2017/_vpo/inst.php?id=1847"
+
+        #act
+        result = self.parser.get_general_institute_indicators_and_values(institute_link)
+
+        #assert
+        self.assertEqual(len(result), 7)
+        self.assertEqual(len(result[0]), 2)
+        for indicator_and_value in indicators_and_values:
+            self.assertTrue(indicator_and_value in result)
+
+
+    def test_get_general_institute_indicators_and_values_2016_should_return_6_rows_2_columns(self):
+        #arrange
+        indicators_and_values = [
+            ["Международная деятельность", "12,04"],
+            ["Образовательная деятельность", "58,98"],
+        ]
+        institute_link = "http://indicators.miccedu.ru/monitoring/2016/_vpo/inst.php?id=1599"
+
+        #act
+        result = self.parser.get_general_institute_indicators_and_values(institute_link)
+
+        #assert
+        self.assertEqual(len(result), 7)
+        self.assertEqual(len(result[0]), 2)
+        for indicator_and_value in indicators_and_values:
+            self.assertTrue(indicator_and_value in result)
+
+    def test_get_general_institute_indicators_and_values_2015_should_return_7_rows_2_columns(self):
+        #arrange
+        indicators_and_values = [
+            ["Финансово-экономическая деятельность", "2153,59"],
+            ["Образовательная деятельность", "70,92"],
+        ]
+        institute_link = "http://indicators.miccedu.ru/monitoring/2015/inst.php?id=1656"
+
+        #act
+        result = self.parser.get_general_institute_indicators_and_values(institute_link)
+
+        #assert
+        self.assertEqual(7, len(result))
+        self.assertEqual(2, len(result[0]))
+        for indicator_and_value in indicators_and_values:
+            self.assertTrue(indicator_and_value in result)
+
 
 if __name__ == "__main__":
     unittest.main()

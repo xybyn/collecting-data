@@ -2,6 +2,7 @@ from CollectionProcessingPipeline import CollectionProcessingPipeline
 from utils import *
 from openpyxl import *
 
+
 class MicceduParser:
     def __init__(self):
         self.root_url = r"http://indicators.miccedu.ru/monitoring/?m=vpo"
@@ -43,10 +44,10 @@ class MicceduParser:
         # Этот найденный td содержит информацию о названии
         # университета, так же данные по каждому из направлений
 
-        #выбираем таблицу с классом an, так как есть еще одна таблица
-        #с университетами, не прошедшими аттестацию, они отображаются в
+        # выбираем таблицу с классом an, так как есть еще одна таблица
+        # с университетами, не прошедшими аттестацию, они отображаются в
         # таблице с классом ifail
-        table_with_data = soup.find("table", {"class":"an"})
+        table_with_data = soup.find("table", {"class": "an"})
         whole_rows = [inst.parent for inst in table_with_data.find_all('td', {"class": "inst"})]
         institutes_with_data = []
         for row in whole_rows:
@@ -106,16 +107,34 @@ class MicceduParser:
     def get_institute_links(self, area_link):
         hrefs = get_hrefs(area_link)
         cleared_area_link = re.match(".*vpo", area_link)
-        if(cleared_area_link is None):
+        if (cleared_area_link is None):
             cleared_area_link = re.match(".*20\d\d", area_link)
         cleared_area_link = cleared_area_link.group(0)
-        institute_links = [f"{cleared_area_link}/{link}" for link in  extract_data_from_collection(hrefs, r"inst\..*")]
+        institute_links = [f"{cleared_area_link}/{link}" for link in extract_data_from_collection(hrefs, r"inst\..*")]
         return institute_links
 
+    # napde id result
 
     def get_institute_indicators_and_values(self, institute_link):
-        tds = get_tds(institute_link, "n")
-        pass
+        tables = get_table_by_class(institute_link, "napde")
+        result_table = list()
 
+        for table in tables:
+            table_data = table.find_all("td", "n")
 
+            for row in table_data:
+                result_table.append([row.text, row.findNext('td').findNext('td').text])
 
+        return result_table
+
+    def get_general_institute_indicators_and_values(self, institute_link):
+        general_tables = get_table_by_id(institute_link, "result")
+        result_table = list()
+
+        for table in general_tables:
+            table_data = table.find_all("td", "n")
+
+            for row in table_data:
+                result_table.append([row.text, row.findNext('td').text])
+
+        return result_table

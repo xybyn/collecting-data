@@ -37,6 +37,11 @@ def remove_dash(string):
     return remove_substring(string, '-', ' ')
 
 
+def get_page_html(url):
+    page = requests.get(url)
+    page.encoding = 'windows-1251'
+    return page.text
+
 def strip(string):
     return string.strip()
 
@@ -53,6 +58,21 @@ def get_tds(url, class_name):
     soup = BeautifulSoup(page.text, "html.parser")
     tds = soup.find_all('td', {"class" : class_name})
     return tds
+
+
+def get_table_by_class(url, class_name):
+    page = requests.get(url)
+    page.encoding = 'windows-1251'
+    soup = BeautifulSoup(page.text, "html.parser")
+    table = soup.find_all('table', {"class" : class_name})
+    return table
+
+def get_table_by_id(url, id):
+    page = requests.get(url)
+    page.encoding = 'windows-1251'
+    soup = BeautifulSoup(page.text, "html.parser")
+    table = soup.find_all('table', {"id" : id})
+    return table
 
 def extract_data_from_collection(hrefs, pattern):
     result = []
