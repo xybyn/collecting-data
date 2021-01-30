@@ -47,6 +47,12 @@ def get_hrefs(url):
     hrefs = [a['href'] for a in soup.find_all('a', href=True)]
     return hrefs
 
+def get_tds(url, class_name):
+    page = requests.get(url)
+    page.encoding = 'windows-1251'
+    soup = BeautifulSoup(page.text, "html.parser")
+    tds = soup.find_all('td', {"class" : class_name})
+    return tds
 
 def extract_data_from_collection(hrefs, pattern):
     result = []

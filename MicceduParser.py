@@ -15,9 +15,10 @@ class MicceduParser:
         # избавляемся от лишних символов 'index.php?...'
         cleared_link = link[:link.rfind('/')]
         hrefs = get_hrefs(link)
-        if self.get_archive_year(link) == '2015':
-            return [f"{cleared_link}/{region_link}" for region_link in extract_data_from_collection(hrefs, "material\.php.*")]
-        return [f"{cleared_link}/{region_link}" for region_link in extract_data_from_collection(hrefs, "\_vpo.*")]
+        region_links = extract_data_from_collection(hrefs, "\_vpo.*")
+        if len(region_links) == 0:
+            region_links = extract_data_from_collection(hrefs, "material\.php.*")
+        return [f"{cleared_link}/{region_link}" for region_link in region_links]
 
     def extract_district_links(self, district_and_area_links):
         return extract_data_from_collection(district_and_area_links, ".*type\=1.*")
@@ -101,3 +102,20 @@ class MicceduParser:
                     ws.append(institute)
 
         wb.save(path)
+
+    def get_institute_links(self, area_link):
+        hrefs = get_hrefs(area_link)
+        cleared_area_link = re.match(".*vpo", area_link)
+        if(cleared_area_link is None):
+            cleared_area_link = re.match(".*20\d\d", area_link)
+        cleared_area_link = cleared_area_link.group(0)
+        institute_links = [f"{cleared_area_link}/{link}" for link in  extract_data_from_collection(hrefs, r"inst\..*")]
+        return institute_links
+
+
+    def get_institute_indicators_and_values(self, institute_link):
+        tds = get_tds(institute_link, "n")
+        pass
+
+
+

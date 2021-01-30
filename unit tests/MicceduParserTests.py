@@ -1,6 +1,7 @@
 import unittest
 from MicceduParser import MicceduParser
 
+
 class MicceduParserTests(unittest.TestCase):
     def setUp(self):
         self.parser = MicceduParser()
@@ -55,7 +56,6 @@ class MicceduParserTests(unittest.TestCase):
         self.assertEqual(len(results), 85)
         for link in links:
             self.assertTrue(link in results)
-
 
     def test_extract_areas_links_for_2018_should_return_85_links(self):
         # arrange
@@ -310,6 +310,139 @@ class MicceduParserTests(unittest.TestCase):
         self.assertEqual(results[0][0], 'Государственный институт экономики, финансов, права и технологий')
         self.assertEqual(results[0][5], '1239,4')
 
+    def test_get_institute_links_2019_should_return_3_institutes(self):
+        # arrange
+        test_links = ['http://indicators.miccedu.ru/monitoring/2019/_vpo/inst.php?id=124',
+                      'http://indicators.miccedu.ru/monitoring/2019/_vpo/inst.php?id=123']
+        area_link = 'http://indicators.miccedu.ru/monitoring/2019/_vpo/material.php?type=2&id=10403'
+        # act
+        result = self.parser.get_institute_links(area_link)
+        # assert
+        self.assertEqual(len(result), 3)
+        for test_link in test_links:
+            self.assertTrue(test_link in result)
+
+    def test_get_institute_links_2019_should_return_3_institutes(self):
+        # arrange
+        test_links = ['http://indicators.miccedu.ru/monitoring/2019/_vpo/inst.php?id=10000374',
+                      'http://indicators.miccedu.ru/monitoring/2019/_vpo/inst.php?id=1']
+        area_link = 'http://indicators.miccedu.ru/monitoring/2019/_vpo/material.php?type=2&id=10711'
+        # act
+        result = self.parser.get_institute_links(area_link)
+        # assert
+        self.assertEqual(len(result), 3)
+        for test_link in test_links:
+            self.assertTrue(test_link in result)
+
+    def test_get_institute_links_2018_should_return_0_institutes(self):
+        # arrange
+        test_links = []
+        area_link = 'http://indicators.miccedu.ru/monitoring/2018/_vpo/material.php?type=2&id=10106'
+        # act
+        result = self.parser.get_institute_links(area_link)
+        # assert
+        self.assertEqual(len(result), 0)
+        for test_link in test_links:
+            self.assertTrue(test_link in result)
+
+    def test_get_institute_links_2018_should_return_3_institutes(self):
+        # arrange
+        test_links = ['http://indicators.miccedu.ru/monitoring/2018/_vpo/inst.php?id=322',
+                      'http://indicators.miccedu.ru/monitoring/2018/_vpo/inst.php?id=10001068',
+                      'http://indicators.miccedu.ru/monitoring/2018/_vpo/inst.php?id=10003240']
+        area_link = 'http://indicators.miccedu.ru/monitoring/2018/_vpo/material.php?type=2&id=11006'
+        # act
+        result = self.parser.get_institute_links(area_link)
+        # assert
+        self.assertEqual(len(result), 3)
+        for test_link in test_links:
+            self.assertTrue(test_link in result)
+
+    def test_get_institute_links_2017_should_return_7_institutes(self):
+        # arrange
+        test_links = ['http://indicators.miccedu.ru/monitoring/2017/_vpo/inst.php?id=110281',
+                      'http://indicators.miccedu.ru/monitoring/2017/_vpo/inst.php?id=10000912',
+                      'http://indicators.miccedu.ru/monitoring/2017/_vpo/inst.php?id=10001285']
+        area_link = 'http://indicators.miccedu.ru/monitoring/2017/_vpo/material.php?type=2&id=10104'
+        # act
+        result = self.parser.get_institute_links(area_link)
+        # assert
+        self.assertEqual(len(result), 7)
+        for test_link in test_links:
+            self.assertTrue(test_link in result)
+
+    def test_get_institute_links_2017_should_return_11_institutes(self):
+        # arrange
+        test_links = ['http://indicators.miccedu.ru/monitoring/2017/_vpo/inst.php?id=12013106',
+                      'http://indicators.miccedu.ru/monitoring/2017/_vpo/inst.php?id=1737']
+        area_link = 'http://indicators.miccedu.ru/monitoring/2017/_vpo/material.php?type=2&id=11004'
+        # act
+        result = self.parser.get_institute_links(area_link)
+        # assert
+        self.assertEqual(len(result), 11)
+        for test_link in test_links:
+            self.assertTrue(test_link in result)
+
+    # !!!!!!!!!!!!!!!!!!!! 2
+    def test_get_institute_links_2016_should_return_8_institutes(self):
+        # arrange
+        test_links = ['http://indicators.miccedu.ru/monitoring/2016/_vpo/inst.php?id=10000715',
+                      'http://indicators.miccedu.ru/monitoring/2016/_vpo/inst.php?id=10007048']
+        area_link = 'http://indicators.miccedu.ru/monitoring/2016/_vpo/material.php?type=2&id=10204'
+        # act
+        result = self.parser.get_institute_links(area_link)
+        # assert
+        self.assertEqual(len(result), 8)
+        for test_link in test_links:
+            self.assertTrue(test_link in result)
+
+    def test_get_institute_links_2016_should_return_5_institutes(self):
+        # arrange
+        test_links = ['http://indicators.miccedu.ru/monitoring/2016/_vpo/inst.php?id=10006893',
+                      'http://indicators.miccedu.ru/monitoring/2016/_vpo/inst.php?id=1979']
+        area_link = 'http://indicators.miccedu.ru/monitoring/2016/_vpo/material.php?type=2&id=11106'
+        # act
+        result = self.parser.get_institute_links(area_link)
+        # assert
+        self.assertEqual(len(result), 5)
+        for test_link in test_links:
+            self.assertTrue(test_link in result)
+
+    def test_get_institute_links_2015_should_return_7_institutes(self):
+        # arrange
+        test_links = ['http://indicators.miccedu.ru/monitoring/2015/inst.php?id=12013090',
+                      'http://indicators.miccedu.ru/monitoring/2015/inst.php?id=113427']
+        area_link = 'http://indicators.miccedu.ru/monitoring/2015/material.php?type=2&id=11302'
+        # act
+        result = self.parser.get_institute_links(area_link)
+        # assert
+        self.assertEqual(len(result), 7)
+        for test_link in test_links:
+            self.assertTrue(test_link in result)
+
+        # !!!!!!!!!!!!
+
+    def test_get_institute_links_2015_should_return_9_institutes(self):
+        # arrange
+        test_links = ['http://indicators.miccedu.ru/monitoring/2015/inst.php?id=10006813',
+                      'http://indicators.miccedu.ru/monitoring/2015/inst.php?id=12007014']
+        area_link = 'http://indicators.miccedu.ru/monitoring/2015/material.php?type=2&id=10103'
+        # act
+        result = self.parser.get_institute_links(area_link)
+        # assert
+        self.assertEqual(len(result), 9)
+        for test_link in test_links:
+            self.assertTrue(test_link in result)
+
+    def test_get_institute_indicators_and_values(self):
+        #arrange
+        institute_link = "http://indicators.miccedu.ru/monitoring/2017/_vpo/inst.php?id=1847"
+
+        #act
+        result = self.parser.get_institute_indicators_and_values(institute_link)
+
+        #assert
+        pass
 
 
 if __name__ == "__main__":
