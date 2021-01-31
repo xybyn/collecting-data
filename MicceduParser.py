@@ -138,3 +138,16 @@ class MicceduParser:
                 result_table.append([row.text, row.findNext('td').text])
 
         return result_table
+
+#analis_dop
+    def get_addition_characteristics(self, institute_link):
+        addition_tables = get_table_by_id(institute_link, "analis_dop")
+        result_table = list()
+
+        for table in addition_tables:
+            table_data = table.find_all("td", "n")
+
+            for row in table_data:
+                result_table.append([row.text, row.findNext('td').findNext('td').text+f" {row.findNext('td').text}"])
+
+        return result_table

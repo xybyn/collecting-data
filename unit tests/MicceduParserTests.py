@@ -618,6 +618,23 @@ class MicceduParserTests(unittest.TestCase):
         for indicator_and_value in indicators_and_values:
             self.assertTrue(indicator_and_value in result)
 
+    def test_get_addidtion_characteristics_should_return_56_rows_and_2_columns(self):
+        indicators_and_values = [
+            ["Наличие электронной библиотечной системы",
+             "да да/нет"],
+            ["Доходы вуза из иностранных источников на выполнение НИОКР",
+             "0,00 тыс. руб."],
+        ]
+        institute_link = "http://indicators.miccedu.ru/monitoring/2019/_vpo/inst.php?id=2025"
+
+        # act
+        result = self.parser.get_addition_characteristics(institute_link)
+
+        # assert
+        self.assertEqual(56+3, len(result))
+        self.assertEqual(2, len(result[0]))
+        for indicator_and_value in indicators_and_values:
+            self.assertTrue(indicator_and_value in result)
 
 if __name__ == "__main__":
     unittest.main()
