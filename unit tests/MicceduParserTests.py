@@ -1,5 +1,6 @@
+import os
 import unittest
-from MicceduParser import MicceduParser
+from MicceduParser import MicceduParser, BeautifulSoup, get_page_html
 
 
 class MicceduParserTests(unittest.TestCase):
@@ -442,8 +443,9 @@ class MicceduParserTests(unittest.TestCase):
         ]
         institute_link = "http://indicators.miccedu.ru/monitoring/2019/_vpo/inst.php?id=1585"
 
-        #act
-        result = self.parser.get_general_institute_indicators_and_values(institute_link)
+        soup = BeautifulSoup(get_page_html(institute_link), "html.parser")
+        # act
+        result = self.parser.get_general_institute_indicators_and_values(soup)
 
         #assert
         self.assertEqual(len(result), 6)
@@ -459,8 +461,9 @@ class MicceduParserTests(unittest.TestCase):
         ]
         institute_link = "http://indicators.miccedu.ru/monitoring/2018/_vpo/inst.php?id=10000374"
 
-        #act
-        result = self.parser.get_general_institute_indicators_and_values(institute_link)
+        soup = BeautifulSoup(get_page_html(institute_link), "html.parser")
+        # act
+        result = self.parser.get_general_institute_indicators_and_values(soup)
 
         #assert
         self.assertEqual(len(result), 7)
@@ -477,8 +480,9 @@ class MicceduParserTests(unittest.TestCase):
         ]
         institute_link = "http://indicators.miccedu.ru/monitoring/2017/_vpo/inst.php?id=1847"
 
-        #act
-        result = self.parser.get_general_institute_indicators_and_values(institute_link)
+        soup = BeautifulSoup(get_page_html(institute_link), "html.parser")
+        # act
+        result = self.parser.get_general_institute_indicators_and_values(soup)
 
         #assert
         self.assertEqual(len(result), 7)
@@ -495,8 +499,9 @@ class MicceduParserTests(unittest.TestCase):
         ]
         institute_link = "http://indicators.miccedu.ru/monitoring/2016/_vpo/inst.php?id=1599"
 
-        #act
-        result = self.parser.get_general_institute_indicators_and_values(institute_link)
+        soup = BeautifulSoup(get_page_html(institute_link), "html.parser")
+        # act
+        result = self.parser.get_general_institute_indicators_and_values(soup)
 
         #assert
         self.assertEqual(len(result), 7)
@@ -512,113 +517,92 @@ class MicceduParserTests(unittest.TestCase):
         ]
         institute_link = "http://indicators.miccedu.ru/monitoring/2015/inst.php?id=1656"
 
-        #act
-        result = self.parser.get_general_institute_indicators_and_values(institute_link)
+        soup = BeautifulSoup(get_page_html(institute_link), "html.parser")
+        # act
+        result = self.parser.get_general_institute_indicators_and_values(soup)
 
         #assert
         self.assertEqual(7, len(result))
         self.assertEqual(2, len(result[0]))
-        for indicator_and_value in indicators_and_values:
-            self.assertTrue(indicator_and_value in result)
 
-    def test_get_general_institute_indicators_and_values_2017_should_return_62_rows_2_columns(self):
-        indicators_and_values = [
-            ["Средний балл ЕГЭ студентов, принятых по результатам ЕГЭ на обучение по очной форме по программам бакалавриата и специалитета за счет средств соответствующих бюджетов бюджетной системы РФ", "59,46"],
-            ["Удельный вес численности иностранных граждан из числа НПР в общей численности НПР", "1,79"],
-        ]
+    def test_get_institute_indicators_and_values_2017_should_return_62_rows_2_columns(self):
+
         institute_link = "http://indicators.miccedu.ru/monitoring/2017/_vpo/inst.php?id=10001068"
 
+        soup = BeautifulSoup(get_page_html(institute_link), "html.parser")
         # act
-        result = self.parser.get_institute_indicators_and_values(institute_link)
+        result = self.parser.get_institute_indicators_and_values(soup)
 
         # assert
         self.assertEqual(62, len(result))
         self.assertEqual(2, len(result[0]))
-        for indicator_and_value in indicators_and_values:
-            self.assertTrue(indicator_and_value in result)
 
-    def test_get_general_institute_indicators_and_values_2019_should_return_62_rows_2_columns(self):
-        indicators_and_values = [
-            ["Количество цитирований публикаций, изданных за последние 5 лет, индексируемых в Российском индексе научного цитирования (далее – РИНЦ) в расчете на 100 НПР","-"],
-            ["Удельный вес численности иностранных граждан из числа НПР в общей численности НПР", "1,79"],
-        ]
+
+    def test_get_institute_indicators_and_values_2019_should_return_62_rows_2_columns(self):
+
         institute_link = "http://indicators.miccedu.ru/monitoring/2019/_vpo/inst.php?id=10000172"
 
+        soup = BeautifulSoup(get_page_html(institute_link), "html.parser")
         # act
-        result = self.parser.get_institute_indicators_and_values(institute_link)
+        result = self.parser.get_institute_indicators_and_values(soup)
 
         # assert
         self.assertEqual(61, len(result))
         self.assertEqual(2, len(result[0]))
-        for indicator_and_value in indicators_and_values:
-            self.assertTrue(indicator_and_value in result)
 
-    def test_get_general_institute_indicators_and_values_2018_should_return_62_rows_2_columns(self):
-        indicators_and_values = [
-            ["Количество лицензионных соглашений","1"],
-            ["Количество персональных компьютеров в расчете на одного студента (приведенного контингента)", "0,34"],
-        ]
+
+    def test_get_institute_indicators_and_values_2018_should_return_62_rows_2_columns(self):
+
         institute_link = "http://indicators.miccedu.ru/monitoring/2018/_vpo/inst.php?id=1658"
 
+        soup = BeautifulSoup(get_page_html(institute_link), "html.parser")
         # act
-        result = self.parser.get_institute_indicators_and_values(institute_link)
+        result = self.parser.get_institute_indicators_and_values(soup)
 
         # assert
         self.assertEqual(62, len(result))
         self.assertEqual(2, len(result[0]))
-        for indicator_and_value in indicators_and_values:
-            self.assertTrue(indicator_and_value in result)
 
-    def test_get_general_institute_indicators_and_values_2017_should_return_62_rows_2_columns(self):
-        indicators_and_values = [
-            ["Количество лицензионных соглашений","0"],
-            ["Доходы образовательной организации из средств от приносящей доход деятельности в расчете на одного НПР", "1 605,00"],
-        ]
+
+    def test_get_institute_indicators_and_values_2017_should_return_62_rows_2_columns(self):
+
         institute_link = "http://indicators.miccedu.ru/monitoring/2017/_vpo/inst.php?id=1832"
 
+        soup = BeautifulSoup(get_page_html(institute_link), "html.parser")
         # act
-        result = self.parser.get_institute_indicators_and_values(institute_link)
+        result = self.parser.get_institute_indicators_and_values(soup)
 
         # assert
         self.assertEqual(62, len(result))
         self.assertEqual(2, len(result[0]))
-        for indicator_and_value in indicators_and_values:
-            self.assertTrue(indicator_and_value in result)
 
-    def test_get_general_institute_indicators_and_values_2016_should_return_62_rows_2_columns(self):
-        indicators_and_values = [
-            ["Доходы образовательной организации из средств от приносящей доход деятельности в расчете на одного НПР", "2 624,41"],
-            ["Удельный вес численности иностранных граждан (кроме стран СНГ) из числа аспирантов (адъюнктов), ординаторов, интернов, ассистентов-стажеров образовательной организации в общей численности аспирантов (адъюнктов), ординаторов, интернов, ассистентов-стажеров", "0,87"],
-        ]
+
+    def test_get_institute_indicators_and_values_2016_should_return_62_rows_2_columns(self):
+
         institute_link = "http://indicators.miccedu.ru/monitoring/2016/_vpo/inst.php?id=1952"
 
+        soup = BeautifulSoup(get_page_html(institute_link), "html.parser")
         # act
-        result = self.parser.get_institute_indicators_and_values(institute_link)
+        result = self.parser.get_institute_indicators_and_values(soup)
 
         # assert
         self.assertEqual(62, len(result))
         self.assertEqual(2, len(result[0]))
-        for indicator_and_value in indicators_and_values:
-            self.assertTrue(indicator_and_value in result)
 
 
-    def test_get_general_institute_indicators_and_values_2015_should_return_62_rows_2_columns(self):
-        indicators_and_values = [
-            ["Доходы образовательной организации из средств от приносящей доход деятельности в расчете на одного НПР", "214,96"],
-            ["Удельный вес численности иностранных граждан из числа НПР в общей численности НПР", "0,69"],
-        ]
+
+    def test_general_institute_indicators_and_values_2015_should_return_62_rows_2_columns(self):
+
         institute_link = "http://indicators.miccedu.ru/monitoring/2015/inst.php?id=1656"
-
+        soup = BeautifulSoup(get_page_html(institute_link), "html.parser")
         # act
-        result = self.parser.get_institute_indicators_and_values(institute_link)
+        result = self.parser.get_institute_indicators_and_values(soup)
 
         # assert
         self.assertEqual(62, len(result))
         self.assertEqual(2, len(result[0]))
-        for indicator_and_value in indicators_and_values:
-            self.assertTrue(indicator_and_value in result)
 
-    def test_get_addidtion_characteristics_should_return_56_rows_and_2_columns(self):
+    def test_get_addition_characteristics_should_return_56_rows_and_2_columns(self):
         indicators_and_values = [
             ["Наличие электронной библиотечной системы",
              "да да/нет"],
@@ -627,14 +611,33 @@ class MicceduParserTests(unittest.TestCase):
         ]
         institute_link = "http://indicators.miccedu.ru/monitoring/2019/_vpo/inst.php?id=2025"
 
+        soup = BeautifulSoup(get_page_html(institute_link), "html.parser")
         # act
-        result = self.parser.get_addition_characteristics(institute_link)
+        result = self.parser.get_addition_characteristics(soup)
 
         # assert
         self.assertEqual(56+3, len(result))
         self.assertEqual(2, len(result[0]))
         for indicator_and_value in indicators_and_values:
             self.assertTrue(indicator_and_value in result)
+
+
+    def excel(self):
+        self.parser.export_to_excel(os.path.join(os.getcwd(), "test1.xlsx"))
+        self.assertTrue(True)
+
+
+    def test_excel(self):
+        self.parser.export_area_to_excel(os.path.join(os.getcwd(), "area.xlsx"),"http://indicators.miccedu.ru/monitoring/2019/_vpo/material.php?type=2&id=10301")
+        self.assertTrue(True)
+
+    def te2st_get_table_headers(self):
+        self.parser.export_area_to_excel(os.path.join(os.getcwd(), "area.xlsx"),"http://indicators.miccedu.ru/monitoring/2019/_vpo/material.php?type=2&id=10301")
+        self.assertTrue(True)
+
+    def test_export_year(self):
+        self.parser.export_year2_to_excel(os.path.join(os.getcwd(), "year.xlsx"),"http://indicators.miccedu.ru/monitoring/2019/index.php?m=vpo")
+        self.assertTrue(True)
 
 if __name__ == "__main__":
     unittest.main()
