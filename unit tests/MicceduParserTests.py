@@ -311,25 +311,27 @@ class MicceduParserTests(unittest.TestCase):
         self.assertEqual(results[0][0], 'Государственный институт экономики, финансов, права и технологий')
         self.assertEqual(results[0][5], '1239,4')
 
-    def test_get_institute_links_2019_should_return_3_institutes(self):
+    def test_get_institute_links_2019_should_return_3_institutes_1(self):
         # arrange
         test_links = ['http://indicators.miccedu.ru/monitoring/2019/_vpo/inst.php?id=124',
                       'http://indicators.miccedu.ru/monitoring/2019/_vpo/inst.php?id=123']
         area_link = 'http://indicators.miccedu.ru/monitoring/2019/_vpo/material.php?type=2&id=10403'
+        soup = BeautifulSoup(get_page_html(area_link))
         # act
-        result = self.parser.get_institute_links(area_link)
+        result = self.parser.get_institute_links(soup, area_link)
         # assert
         self.assertEqual(len(result), 3)
         for test_link in test_links:
             self.assertTrue(test_link in result)
 
-    def test_get_institute_links_2019_should_return_3_institutes(self):
+    def test_get_institute_links_2019_should_return_3_institutes_2(self):
         # arrange
         test_links = ['http://indicators.miccedu.ru/monitoring/2019/_vpo/inst.php?id=10000374',
                       'http://indicators.miccedu.ru/monitoring/2019/_vpo/inst.php?id=1']
         area_link = 'http://indicators.miccedu.ru/monitoring/2019/_vpo/material.php?type=2&id=10711'
+        soup = BeautifulSoup(get_page_html(area_link))
         # act
-        result = self.parser.get_institute_links(area_link)
+        result = self.parser.get_institute_links(soup, area_link)
         # assert
         self.assertEqual(len(result), 3)
         for test_link in test_links:
@@ -339,8 +341,9 @@ class MicceduParserTests(unittest.TestCase):
         # arrange
         test_links = []
         area_link = 'http://indicators.miccedu.ru/monitoring/2018/_vpo/material.php?type=2&id=10106'
+        soup = BeautifulSoup(get_page_html(area_link))
         # act
-        result = self.parser.get_institute_links(area_link)
+        result = self.parser.get_institute_links(soup, area_link)
         # assert
         self.assertEqual(len(result), 0)
         for test_link in test_links:
@@ -352,8 +355,9 @@ class MicceduParserTests(unittest.TestCase):
                       'http://indicators.miccedu.ru/monitoring/2018/_vpo/inst.php?id=10001068',
                       'http://indicators.miccedu.ru/monitoring/2018/_vpo/inst.php?id=10003240']
         area_link = 'http://indicators.miccedu.ru/monitoring/2018/_vpo/material.php?type=2&id=11006'
+        soup = BeautifulSoup(get_page_html(area_link))
         # act
-        result = self.parser.get_institute_links(area_link)
+        result = self.parser.get_institute_links(soup, area_link)
         # assert
         self.assertEqual(len(result), 3)
         for test_link in test_links:
@@ -365,8 +369,9 @@ class MicceduParserTests(unittest.TestCase):
                       'http://indicators.miccedu.ru/monitoring/2017/_vpo/inst.php?id=10000912',
                       'http://indicators.miccedu.ru/monitoring/2017/_vpo/inst.php?id=10001285']
         area_link = 'http://indicators.miccedu.ru/monitoring/2017/_vpo/material.php?type=2&id=10104'
+        soup = BeautifulSoup(get_page_html(area_link))
         # act
-        result = self.parser.get_institute_links(area_link)
+        result = self.parser.get_institute_links(soup, area_link)
         # assert
         self.assertEqual(len(result), 7)
         for test_link in test_links:
@@ -377,8 +382,9 @@ class MicceduParserTests(unittest.TestCase):
         test_links = ['http://indicators.miccedu.ru/monitoring/2017/_vpo/inst.php?id=12013106',
                       'http://indicators.miccedu.ru/monitoring/2017/_vpo/inst.php?id=1737']
         area_link = 'http://indicators.miccedu.ru/monitoring/2017/_vpo/material.php?type=2&id=11004'
+        soup = BeautifulSoup(get_page_html(area_link))
         # act
-        result = self.parser.get_institute_links(area_link)
+        result = self.parser.get_institute_links(soup, area_link)
         # assert
         self.assertEqual(len(result), 11)
         for test_link in test_links:
@@ -390,8 +396,9 @@ class MicceduParserTests(unittest.TestCase):
         test_links = ['http://indicators.miccedu.ru/monitoring/2016/_vpo/inst.php?id=10000715',
                       'http://indicators.miccedu.ru/monitoring/2016/_vpo/inst.php?id=10007048']
         area_link = 'http://indicators.miccedu.ru/monitoring/2016/_vpo/material.php?type=2&id=10204'
+        soup = BeautifulSoup(get_page_html(area_link))
         # act
-        result = self.parser.get_institute_links(area_link)
+        result = self.parser.get_institute_links(soup, area_link)
         # assert
         self.assertEqual(len(result), 8)
         for test_link in test_links:
@@ -402,8 +409,9 @@ class MicceduParserTests(unittest.TestCase):
         test_links = ['http://indicators.miccedu.ru/monitoring/2016/_vpo/inst.php?id=10006893',
                       'http://indicators.miccedu.ru/monitoring/2016/_vpo/inst.php?id=1979']
         area_link = 'http://indicators.miccedu.ru/monitoring/2016/_vpo/material.php?type=2&id=11106'
+        soup = BeautifulSoup(get_page_html(area_link))
         # act
-        result = self.parser.get_institute_links(area_link)
+        result = self.parser.get_institute_links(soup, area_link)
         # assert
         self.assertEqual(len(result), 5)
         for test_link in test_links:
@@ -414,8 +422,10 @@ class MicceduParserTests(unittest.TestCase):
         test_links = ['http://indicators.miccedu.ru/monitoring/2015/inst.php?id=12013090',
                       'http://indicators.miccedu.ru/monitoring/2015/inst.php?id=113427']
         area_link = 'http://indicators.miccedu.ru/monitoring/2015/material.php?type=2&id=11302'
+        soup = BeautifulSoup(get_page_html(area_link))
         # act
-        result = self.parser.get_institute_links(area_link)
+
+        result = self.parser.get_institute_links(soup,area_link)
         # assert
         self.assertEqual(len(result), 7)
         for test_link in test_links:
@@ -428,8 +438,9 @@ class MicceduParserTests(unittest.TestCase):
         test_links = ['http://indicators.miccedu.ru/monitoring/2015/inst.php?id=10006813',
                       'http://indicators.miccedu.ru/monitoring/2015/inst.php?id=12007014']
         area_link = 'http://indicators.miccedu.ru/monitoring/2015/material.php?type=2&id=10103'
+        soup = BeautifulSoup(get_page_html(area_link))
         # act
-        result = self.parser.get_institute_links(area_link)
+        result = self.parser.get_institute_links(soup, area_link)
         # assert
         self.assertEqual(len(result), 9)
         for test_link in test_links:
@@ -665,34 +676,9 @@ class MicceduParserTests(unittest.TestCase):
         for indicator_and_value in directions:
             self.assertTrue(indicator_and_value in result)
 
-    def excel(self):
-        self.parser.export_to_excel(os.path.join(os.getcwd(), "test1.xlsx"))
-        self.assertTrue(True)
 
-
-    def test_excel(self):
-        self.parser.export_area_to_excel(os.path.join(os.getcwd(), "area.xlsx"),"http://indicators.miccedu.ru/monitoring/2019/_vpo/material.php?type=2&id=10301")
-        self.assertTrue(True)
-
-    def te2st_get_table_headers(self):
-        self.parser.export_area_to_excel(os.path.join(os.getcwd(), "area.xlsx"),"http://indicators.miccedu.ru/monitoring/2019/_vpo/material.php?type=2&id=10301")
-        self.assertTrue(True)
-
-    def test_export_year(self):
-        self.parser.export_year2_to_excel(os.path.join(os.getcwd(), "year.xlsx"),"http://indicators.miccedu.ru/monitoring/2019/index.php?m=vpo")
-        self.assertTrue(True)
-
-
-    def test_export_to_json(self):
-        result = self.parser.export_to_json()
-        self.assertTrue(True)
-
-    def test_export_area_to_json(self):
-        self.parser.export_area_to_json("http://indicators.miccedu.ru/monitoring/2019/_vpo/material.php?type=2&id=11108", os.path.join(os.getcwd(), "areas.json"))
-        self.assertTrue(True)
-
-    def test_export_year_to_json(self):
-        result = self.parser.export_year_to_json("http://indicators.miccedu.ru/monitoring/2019/index.php?m=vpo", os.path.join(os.getcwd(), "year2019.json"))
+    def export_year_to_json(self):
+        result = self.parser.export_year_to_json("http://indicators.miccedu.ru/monitoring/2018/index.php?m=vpo", os.path.join(os.getcwd(), "year2018.json"))
         self.assertTrue(True)
 
 if __name__ == "__main__":

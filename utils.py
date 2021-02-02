@@ -43,6 +43,20 @@ def capitalize(string):
 def replace_brackets(string):
     return re.sub('[«»]','\"', string)
 
+def lower(string):
+    return string.lower()
+
+def title(string):
+    return string.title()
+
+def first_capital(string):
+    if len(string) > 1:
+        return string[0].upper() + string[1:]
+    if len(string) == 1:
+        return string.upper()
+
+    return string
+
 def get_page_html(url):
     page = requests.get(url)
     page.encoding = 'windows-1251'
