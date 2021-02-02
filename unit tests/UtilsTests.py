@@ -206,5 +206,28 @@ class UtilsTests(unittest.TestCase):
         # assert
         self.assertEqual(" hello world   ", result)
 
+
+    def test_replace_brackets_should_return_cleared_string(self):
+        #arrange
+        test_string = "Автономная некоммерческая организация высшего образования «Институт гуманитарного образования и информационных технологий»"
+        self.pipeline = DataProcessingPipeline(test_string)
+        expect = "Автономная некоммерческая организация высшего образования \"Институт гуманитарного образования и информационных технологий\""
+        #act
+        self.pipeline.add(replace_brackets)
+        result = self.pipeline.target_string
+        #assert
+        self.assertEqual(result, expect)
+
+    def test_replace_brackets_should_return_same_string(self):
+        #arrange
+        test_string = "Автономная некоммерческая организация высшего образования Институт гуманитарного образования и информационных технологий"
+        self.pipeline = DataProcessingPipeline(test_string)
+        expect = "Автономная некоммерческая организация высшего образования Институт гуманитарного образования и информационных технологий"
+        #act
+        self.pipeline.add(replace_brackets)
+        result = self.pipeline.target_string
+        #assert
+        self.assertEqual(result, expect)
+
 if __name__ == '__main__':
     unittest.main()

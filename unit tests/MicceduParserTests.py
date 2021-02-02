@@ -622,6 +622,49 @@ class MicceduParserTests(unittest.TestCase):
             self.assertTrue(indicator_and_value in result)
 
 
+    def test_get_directions_2019_should_return_9_rows(self):
+        directions = [
+            "40.00.00 - Юриспруденция",
+            "43.00.00 - Сервис и туризм"
+        ]
+        institute_link = "http://indicators.miccedu.ru/monitoring/2019/_vpo/inst.php?id=1847"
+        page_html = get_page_html(institute_link)
+        soup = BeautifulSoup(page_html, "html.parser")
+        # act
+        result = self.parser.get_directions(soup)
+
+        # assert
+        self.assertEqual(9, len(result))
+        for indicator_and_value in directions:
+            self.assertTrue(indicator_and_value in result)
+
+    def test_get_directions_2019_should_return_nothing(self):
+        institute_link = "http://indicators.miccedu.ru/monitoring/2019/_vpo/inst.php?id=14013535"
+        page_html = get_page_html(institute_link)
+        soup = BeautifulSoup(page_html, "html.parser")
+        # act
+        result = self.parser.get_directions(soup)
+
+        # assert
+        self.assertEqual(0, len(result))
+
+
+    def test_get_directions_2015_should_return_11_rows(self):
+        directions = [
+            "05.00.00 - НАУКИ О ЗЕМЛЕ",
+            "43.00.00 - СЕРВИС И ТУРИЗМ"
+        ]
+        institute_link = "http://indicators.miccedu.ru/monitoring/2015/material.php?type=2&id=10307"
+        page_html = get_page_html(institute_link)
+        soup = BeautifulSoup(page_html, "html.parser")
+        # act
+        result = self.parser.get_directions(soup)
+
+        # assert
+        self.assertEqual(11, len(result))
+        for indicator_and_value in directions:
+            self.assertTrue(indicator_and_value in result)
+
     def excel(self):
         self.parser.export_to_excel(os.path.join(os.getcwd(), "test1.xlsx"))
         self.assertTrue(True)
@@ -637,6 +680,19 @@ class MicceduParserTests(unittest.TestCase):
 
     def test_export_year(self):
         self.parser.export_year2_to_excel(os.path.join(os.getcwd(), "year.xlsx"),"http://indicators.miccedu.ru/monitoring/2019/index.php?m=vpo")
+        self.assertTrue(True)
+
+
+    def test_export_to_json(self):
+        result = self.parser.export_to_json()
+        self.assertTrue(True)
+
+    def test_export_area_to_json(self):
+        self.parser.export_area_to_json("http://indicators.miccedu.ru/monitoring/2019/_vpo/material.php?type=2&id=11108", os.path.join(os.getcwd(), "areas.json"))
+        self.assertTrue(True)
+
+    def test_export_year_to_json(self):
+        result = self.parser.export_year_to_json("http://indicators.miccedu.ru/monitoring/2019/index.php?m=vpo", os.path.join(os.getcwd(), "year2019.json"))
         self.assertTrue(True)
 
 if __name__ == "__main__":

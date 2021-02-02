@@ -1,6 +1,62 @@
 from CollectionProcessingPipeline import CollectionProcessingPipeline
 from utils import *
-from openpyxl import *
+from openpyxl import Workbook
+import json
+from DataProcessingPipeline import *
+
+class Year:
+    def __init__(self, year):
+        self.year = year
+        self.areas = []
+
+class Area:
+    def __init__(self, name):
+        self.name = name
+        self.institutes = []
+
+class Institute:
+    def __init__(self, name):
+        self.name = name
+        self.indicators = []
+        self.directions = []
+
+class Indicator:
+    def __init__(self, indicator, value):
+        self.indicator = indicator
+        self.value = value
+
+class Direction:
+    def __init__(self, direction):
+        self.direction = direction
+
+def my_default(obj):
+    if isinstance(obj, Area):
+        return {
+            "name": obj.name,
+            "institutes" : obj.institutes
+        }
+    if isinstance(obj, Institute):
+        return {
+            "name": obj.name,
+            "indicators" : obj.indicators,
+            "directions" : obj.directions
+        }
+    if isinstance(obj, Indicator):
+        return {
+            "indicator": obj.indicator,
+            "value": obj.value,
+        }
+    if isinstance(obj, Direction):
+        return {
+            "direction": obj.direction,
+
+        }
+    if isinstance(obj, Year):
+        return {
+            "year": obj.year,
+            "areas": obj.areas,
+
+        }
 
 
 class MicceduParser:
@@ -258,3 +314,114 @@ class MicceduParser:
                     current_ws.append(item)
 
         wb.save(path)
+
+    def export_to_json(self):
+
+        year = 2019
+        areas = ["area1"]
+        institutes = ["instutute1"]
+        indicators = [["indicator1", "value1"]]
+        directions = ["direction1"]
+        areas_array = []
+        for area in areas:
+            new_area = Area(area)
+            for institute in institutes:
+                new_institute = Institute(institute)
+                for indicator in indicators:
+                    new_indicator = Indicator(indicator[0], indicator[1])
+                    new_institute.indicators.append(new_indicator)
+                for direction in directions:
+                    new_direction = Direction(direction)
+                    new_institute.directions.append(new_direction)
+                new_area.institutes.append(new_institute)
+
+            areas_array.append(new_area)
+
+
+        j = json.dumps(areas_array, ensure_ascii=False, default=my_default)
+        pass
+
+    def export_area_to_json(self, area_link, path):
+        soup = BeautifulSoup(get_page_html(area_link), "html.parser")
+        area_name = self.get_area_name(soup)
+        new_area = Area(area_name)
+        institute_links = self.get_institute_links(soup, area_link)
+        for institute_link in institute_links:
+            soup = BeautifulSoup(get_page_html(institute_link), "html.parser")
+            institute_name = self.get_institute_name(soup, institute_link)
+            new_institute = Institute(institute_name)
+            indicators_and_values = self.get_institute_indicators_and_values(soup) + self.get_addition_characteristics(soup)
+            for indicator in indicators_and_values:
+                new_indicator = Indicator(indicator[0], indicator[1])
+                new_institute.indicators.append(new_indicator)
+            directions = self.get_directions(soup)
+            for direction in directions:
+                new_direction = Direction(direction)
+                new_institute.directions.append(new_direction)
+            new_area.institutes.append(new_institute)
+
+        json_text = json.dumps(new_area, ensure_ascii=False, default=my_default)
+        file = open(path, "w", encoding= "utf-8")
+        file.write(json_text)
+        file.close()
+
+
+    def export_year_to_json(self, archive_link, path):
+        year = self.get_archive_year(archive_link)
+        new_year = Year(int(year))
+        area_links = self.extract_area_links( self.get_district_and_area_links(archive_link))
+        for area_link in area_links:
+            area_soup = BeautifulSoup(get_page_html(area_link), "html.parser")
+            area_name = self.get_area_name(area_soup)
+            print(f"parsing area: {area_name}")
+
+            new_area = Area(area_name)
+            institute_links = self.get_institute_links(area_soup, area_link)
+            for institute_link in institute_links:
+                soup = BeautifulSoup(get_page_html(institute_link), "html.parser")
+                institute_name = DataProcessingPipeline(self.get_institute_name(soup, institute_link))\
+                    .add(replace_brackets)\
+                    .add(capitalize)\
+                    .target_string
+
+                print(f"parsing institute: {institute_name}")
+                new_institute = Institute(institute_name)
+                indicators_and_values = self.get_institute_indicators_and_values(soup) + self.get_addition_characteristics(soup)
+                for indicator in indicators_and_values:
+                    indicator_name = DataProcessingPipeline(indicator[0])\
+                    .add(replace_brackets)\
+                    .add(capitalize)\
+                    .target_string
+                    new_indicator = Indicator(indicator_name, indicator[1])
+                    new_institute.indicators.append(new_indicator)
+                directions = self.get_directions(soup)
+                for direction in directions:
+                    new_direction = Direction(direction)
+                    new_institute.directions.append(new_direction)
+                new_area.institutes.append(new_institute)
+            new_year.areas.append(new_area)
+
+        print("exporting...")
+        json_text = json.dumps(new_year, ensure_ascii=False, default=my_default)
+        file = open(path, "w", encoding="utf-8")
+        file.write(json_text)
+        file.close()
+
+
+    def get_directions(self, soup):
+        table = get_table_by_id(soup, "analis_reg")
+        if len(table)==0:
+            table = get_table_by_id(soup, "trud")
+            if len(table) == 0:
+                return []
+
+            rows = table.find_all("tr")[2:]
+            tds =  [row.find("td") for row in rows]
+            directions = [td.text for td in tds if "class" in td.attrs]
+            return directions
+
+        table = table[0]
+
+        rows = table.find_all("tr")[2:]
+        directions = [row.find("td").text for row in rows]
+        return directions

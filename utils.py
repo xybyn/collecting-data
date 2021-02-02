@@ -36,6 +36,12 @@ def remove_dash_and_space(string):
 def remove_dash(string):
     return remove_substring(string, '-', ' ')
 
+def capitalize(string):
+    return string.capitalize()
+
+
+def replace_brackets(string):
+    return re.sub('[«»]','\"', string)
 
 def get_page_html(url):
     page = requests.get(url)
