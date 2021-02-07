@@ -676,10 +676,37 @@ class MicceduParserTests(unittest.TestCase):
         for indicator_and_value in directions:
             self.assertTrue(indicator_and_value in result)
 
+    def test_get_directions_2015_should_return_nothing(self):
+        institute_link = "http://indicators.miccedu.ru/monitoring/2015/inst.php?id=12013221"
+        page_html = get_page_html(institute_link)
+        soup = BeautifulSoup(page_html, "html.parser")
+        # act
+        result = self.parser.get_directions(soup)
+        self.assertEqual(0, len(result))
+
 
     def export_year_to_json(self):
         result = self.parser.export_year_to_json("http://indicators.miccedu.ru/monitoring/2018/index.php?m=vpo", os.path.join(os.getcwd(), "year2018.json"))
         self.assertTrue(True)
 
+    def export_2017_year_to_json(self):
+        result = self.parser.export_year_to_json("http://indicators.miccedu.ru/monitoring/2017/index.php?m=vpo", os.path.join(os.getcwd(), "year2017.json"))
+        self.assertTrue(True)
+
+    def test_export_2015_year_to_json(self):
+        result = self.parser.export_year_to_json("http://indicators.miccedu.ru/monitoring/2015", os.path.join(os.getcwd(), "new2015.json"))
+        self.assertTrue(True)
+    def test_export_2019_year_to_json(self):
+        result = self.parser.export_year_to_json("http://indicators.miccedu.ru/monitoring/2019/index.php?m=vpo", os.path.join(os.getcwd(), "new2019.json"))
+        self.assertTrue(True)
+
+    def test_export_2016_year_to_json(self):
+        result = self.parser.export_year_to_json("http://indicators.miccedu.ru/monitoring/2016/index.php?m=vpo", os.path.join(os.getcwd(), "new2016.json"))
+        self.assertTrue(True)
+
+    def test_export_2018_year_to_json(self):
+        result = self.parser.export_year_to_json("http://indicators.miccedu.ru/monitoring/2018/index.php?m=vpo",
+                                                 os.path.join(os.getcwd(), "new2018.json"))
+        self.assertTrue(True)
 if __name__ == "__main__":
     unittest.main()

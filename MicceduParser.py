@@ -18,7 +18,11 @@ class MicceduParser:
 
     def get_district_and_area_links(self, link):
         # избавляемся от лишних символов 'index.php?...'
-        cleared_link = link[:link.rfind('/')]
+        archive_year = int(self.get_archive_year(link))
+        cleared_link = link
+        if archive_year > 2015:
+            cleared_link = link[:link.rfind('/')]
+
         soup = BeautifulSoup(get_page_html(link), "html.parser")
         hrefs = get_hrefs(soup)
         region_links = extract_data_from_collection(hrefs, "\_vpo.*")
@@ -90,6 +94,8 @@ class MicceduParser:
 
     def get_institute_indicators_and_values(self, soup):
         tables = get_table_by_class(soup, "napde")
+        if (tables is None):
+            return [[]]
         result_table = list()
 
         for table in tables:
@@ -102,6 +108,8 @@ class MicceduParser:
 
     def get_general_institute_indicators_and_values(self, soup):
         general_tables = get_table_by_id(soup, "result")
+        if (general_tables is None):
+            return [[]]
         result_table = list()
 
         for table in general_tables:
@@ -114,6 +122,8 @@ class MicceduParser:
 
     def get_addition_characteristics(self, soup):
         addition_tables = get_table_by_id(soup, "analis_dop")
+        if(addition_tables is None):
+            return []
         result_table = list()
 
         for table in addition_tables:
@@ -127,12 +137,17 @@ class MicceduParser:
 
 
     def get_institute_name(self, soup, institute_link):
-        table = get_table_by_id(soup, "info")[0]
-        return table.b.text
+        table = get_table_by_id(soup, "info")
+        if table is None:
+            return None
+        return table[0].b.text
 
 
     def get_area_name(self, area_soup):
         div = area_soup.find("div", {"id": "gerb"})
+        if div is None:
+            table = get_table_by_style(area_soup, r"margin:40px 40px;")[0]
+            return table.contents[1].text
         return div.contents[3].text
 
 
@@ -144,7 +159,6 @@ class MicceduParser:
         for area_link in area_links:
             area_soup = BeautifulSoup(get_page_html(area_link), "html.parser")
             area_name = DataProcessingPipeline(self.get_area_name(area_soup)) \
-                .add(lower) \
                 .add(first_capital) \
                 .target_string
             print(f"parsing area: {area_name}")
@@ -153,7 +167,10 @@ class MicceduParser:
             institute_links = self.get_institute_links(area_soup, area_link)
             for institute_link in institute_links:
                 soup = BeautifulSoup(get_page_html(institute_link), "html.parser")
-                institute_name = DataProcessingPipeline(self.get_institute_name(soup, institute_link)) \
+                temp = self.get_institute_name(soup, institute_link)
+                if temp is None:
+                    continue
+                institute_name = DataProcessingPipeline(temp) \
                     .add(replace_brackets) \
                     .add(first_capital) \
                     .target_string
@@ -171,7 +188,11 @@ class MicceduParser:
                     new_institute.indicators.append(new_indicator)
                 directions = self.get_directions(soup)
                 for direction in directions:
-                    new_direction = Direction(direction)
+                    direction_name = DataProcessingPipeline(direction) \
+                        .add(replace_brackets) \
+                        .add(first_capital) \
+                        .target_string
+                    new_direction = Direction(direction_name)
                     new_institute.directions.append(new_direction)
                 new_area.institutes.append(new_institute)
             new_year.areas.append(new_area)

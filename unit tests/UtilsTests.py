@@ -229,5 +229,16 @@ class UtilsTests(unittest.TestCase):
         #assert
         self.assertEqual(result, expect)
 
+    def test_first_capital_should_return_same_string(self):
+        #arrange
+        test_string = "г.Москва"
+        self.pipeline = DataProcessingPipeline(test_string)
+        expect = "Г.Москва"
+        #act
+        self.pipeline.add(first_capital)
+        result = self.pipeline.target_string
+        #assert
+        self.assertEqual(result, expect)
+
 if __name__ == '__main__':
     unittest.main()

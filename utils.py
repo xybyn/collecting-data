@@ -6,6 +6,7 @@ import os
 from threading import Thread
 import gevent.monkey
 
+
 def remove_substring(string, substring, replacement):
     if substring in string:
         return string.replace(substring, replacement)
@@ -36,18 +37,22 @@ def remove_dash_and_space(string):
 def remove_dash(string):
     return remove_substring(string, '-', ' ')
 
+
 def capitalize(string):
     return string.capitalize()
 
 
 def replace_brackets(string):
-    return re.sub('[«»]','\"', string)
+    return re.sub('[«»]', '\"', string)
+
 
 def lower(string):
     return string.lower()
 
+
 def title(string):
     return string.title()
+
 
 def first_capital(string):
     if len(string) > 1:
@@ -57,14 +62,15 @@ def first_capital(string):
 
     return string
 
+
 def get_page_html(url):
     page = requests.get(url)
     page.encoding = 'windows-1251'
     return page.text
 
+
 def strip(string):
     return string.strip()
-
 
 
 def get_hrefs(soup):
@@ -74,17 +80,24 @@ def get_hrefs(soup):
 
 def get_tds(url, class_name):
     soup = BeautifulSoup(get_page_html(url), "html.parser")
-    tds = soup.find_all('td', {"class" : class_name})
+    tds = soup.find_all('td', {"class": class_name})
     return tds
 
 
 def get_table_by_class(soup, class_name):
-    table = soup.find_all('table', {"class" : class_name})
+    table = soup.find_all('table', {"class": class_name})
     return table
 
+
 def get_table_by_id(soup, id):
-    table = soup.find_all('table', {"id" : id})
+    table = soup.find_all('table', {"id": id})
     return table
+
+
+def get_table_by_style(soup, style):
+    table = soup.find_all('table', {"style": style})
+    return table
+
 
 def extract_data_from_collection(hrefs, pattern):
     result = list()
@@ -114,6 +127,7 @@ def download_files(url_origin, file_paths_on_site, path_to_save):
     for file_path_on_site in file_paths_on_site:
         download_file(url_origin, file_path_on_site, path_to_save)
 
+
 def download_files_in_parallel(url_origin, file_paths_on_site, path_to_save):
     threads = []
     for file_path_on_site in file_paths_on_site:
@@ -123,8 +137,10 @@ def download_files_in_parallel(url_origin, file_paths_on_site, path_to_save):
     for thread in threads:
         thread.join()
 
+
 def download_files_async(url_origin, file_paths_on_site, path_to_save):
     gevent.monkey.patch_all()
 
-    jobs = [gevent.spawn(download_file, url_origin, file_path_on_site, path_to_save) for file_path_on_site in file_paths_on_site]
+    jobs = [gevent.spawn(download_file, url_origin, file_path_on_site, path_to_save) for file_path_on_site in
+            file_paths_on_site]
     gevent.wait(jobs)
