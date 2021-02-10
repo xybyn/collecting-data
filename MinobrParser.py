@@ -1,9 +1,12 @@
 from utils import *
+
+
 class MinobrParser:
     def __init__(self):
         self.url_origin = "https://minobrnauki.gov.ru"
         self._url_with_links_on_archives = "https://minobrnauki.gov.ru/action/stat/highed/";
         self.soup = BeautifulSoup(get_page_html(self._url_with_links_on_archives), "html.parser")
+
     def download_vpo1(self, vpo1_path):
         hrefs = get_hrefs(self.soup)
         file_paths_vpo1 = extract_data_from_collection(hrefs, ".*VPO.1.*(rar|zip)")
