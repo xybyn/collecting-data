@@ -5,6 +5,7 @@ from bs4 import BeautifulSoup
 import os
 from threading import Thread
 import gevent.monkey
+from pyunpack import Archive
 
 
 def remove_substring(string, substring, replacement):
@@ -94,11 +95,6 @@ def get_table_by_id(soup, id):
     return table
 
 
-def get_table_by_style(soup, style):
-    table = soup.find_all('table', {"style": style})
-    return table
-
-
 def extract_data_from_collection(hrefs, pattern):
     result = list()
 
@@ -144,3 +140,11 @@ def download_files_async(url_origin, file_paths_on_site, path_to_save):
     jobs = [gevent.spawn(download_file, url_origin, file_path_on_site, path_to_save) for file_path_on_site in
             file_paths_on_site]
     gevent.wait(jobs)
+
+
+def unarchive(archives_path, path_to_save):
+    archives = os.listdir(archives_path)
+    for archive in archives:
+        os.mkdir(path_to_save + archive.removesuffix(".*(rar|zip)"))
+        Archive(archives_path + archive).extractall(path_to_save + archive.removesuffix(".*(rar|zip)"))
+        print(f"{archive} unarchived")
