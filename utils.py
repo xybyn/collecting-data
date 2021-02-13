@@ -145,6 +145,8 @@ def download_files_async(url_origin, file_paths_on_site, path_to_save):
 def unarchive(archives_path, path_to_save):
     archives = os.listdir(archives_path)
     for archive in archives:
-        os.mkdir(path_to_save + archive.removesuffix(".*(rar|zip)"))
-        Archive(archives_path + archive).extractall(path_to_save + archive.removesuffix(".*(rar|zip)"))
+        archive_name_without_extension = re.sub(r'\..*', '', str(archive))
+        dir_name = os.path.join(path_to_save, archive_name_without_extension)
+        os.mkdir(dir_name)
+        Archive(os.path.join(archives_path,archive)).extractall(dir_name)
         print(f"{archive} unarchived")
