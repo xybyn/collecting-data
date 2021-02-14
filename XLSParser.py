@@ -1,5 +1,6 @@
 import json
 import xlrd
+from xlrd import XLRDError
 from models import *
 
 
@@ -28,9 +29,10 @@ class XLSParser:
 
     def parse_p2_1_1(self, xls_path):
 
-        sheet = open_book_sheet(xls_path, self.P2_1_1)
-
-        if sheet is None:
+        try:
+            sheet = open_book_sheet(xls_path, self.P2_1_1)
+        except XLRDError:
+            print(f"Sheet {self.P2_1_1} is absent")
             return
 
         start = sheet.col_values(0).index('Программы бакалавриата - всего')
@@ -40,16 +42,17 @@ class XLSParser:
         for row_num in range(start, end + 1):
             row = sheet.row_values(row_num)
 
-            table_row = TableRowP211(row[0], row[2], row[3], row[6], row[9])
+            table_row = TableRowP211(row[2], row[3], row[6], row[9])
 
             json_text = json.dumps(table_row, ensure_ascii=False, default=my_default)
             print(json_text)
 
     def parse_p2_1_2_1(self, xls_path):
 
-        sheet = open_book_sheet(xls_path, self.P2_1_2_1)
-
-        if sheet is None:
+        try:
+            sheet = open_book_sheet(xls_path, self.P2_1_2_1)
+        except XLRDError:
+            print(f"Sheet {self.P2_1_2_1} is absent")
             return
 
         start = sheet.col_values(0).index('Программы бакалавриата - всего')
@@ -59,16 +62,17 @@ class XLSParser:
         for row_num in range(start, end + 1):
             row = sheet.row_values(row_num)
 
-            table_row = TableRowP2121(row[0], row[3])
+            table_row = TableRowP2121(row[3])
 
             json_text = json.dumps(table_row, ensure_ascii=False, default=my_default)
             print(json_text)
 
     def parse_p2_1_2_4(self, xls_path):
 
-        sheet = open_book_sheet(xls_path, self.P2_1_2_4)
-
-        if sheet is None:
+        try:
+            sheet = open_book_sheet(xls_path, self.P2_1_2_4)
+        except XLRDError:
+            print(f"Sheet {self.P2_1_2_4} is absent")
             return
 
         start = sheet.col_values(0).index('Программы бакалавриата - всего')
@@ -78,16 +82,17 @@ class XLSParser:
         for row_num in range(start, end + 1):
             row = sheet.row_values(row_num)
 
-            table_row = TableRowP2124(row[0], row[13], row[18], row[19])
+            table_row = TableRowP2124(row[3], row[13], row[18], row[19])
 
             json_text = json.dumps(table_row, ensure_ascii=False, default=my_default)
             print(json_text)
 
     def parse_p2_1_3(self, xls_path):
 
-        sheet = open_book_sheet(xls_path, self.P2_1_3)
-
-        if sheet is None:
+        try:
+            sheet = open_book_sheet(xls_path, self.P2_1_3)
+        except XLRDError:
+            print(f"Sheet {self.P2_1_3} is absent")
             return
 
         start = sheet.col_values(0).index('Программы бакалавриата - всего')
@@ -97,7 +102,7 @@ class XLSParser:
         for row_num in range(start, end + 1):
             row = sheet.row_values(row_num)
 
-            table_row = TableRowP213(row[0], row[3], row[4], row[8], row[9], row[15], row[16])
+            table_row = TableRowP213(row[3], row[4], row[8], row[9], row[15], row[16])
 
             json_text = json.dumps(table_row, ensure_ascii=False, default=my_default)
             print(json_text)
@@ -109,6 +114,7 @@ class XLSParser:
         book_sh_names = [name for name in book.sheet_names() if self.P2_12 in name]
 
         if len(book_sh_names) == 0:
+            print(f"Sheets {self.P2_12} are absent")
             return
 
         for sheet_name in book_sh_names:

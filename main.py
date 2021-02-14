@@ -10,7 +10,7 @@ def main():
 
     # Р2_1_1 Р2_1_2(1) Р2_1_2 (4) Р2_1_3(1) Р2_12(все)
 
-    XLSParser().parse_p2_12(unarchived_path + "/VPO_1_2018.rar/СВОД_ВПО1_ГОС_заочная.xls")
+    XLSParser().parse(unarchived_path + "/VPO-1_za_2019_g..rar/ВПО-1 2019/Выходные файлы ВПО-1 2019/t1a_.xls")
 
 
 if __name__ == "__main__":
