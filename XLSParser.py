@@ -42,7 +42,7 @@ class XLSParser:
         for row_num in range(start, end + 1):
             row = sheet.row_values(row_num)
 
-            table_row = TableRowP211(row[2], row[3], row[6], row[9])
+            table_row = TableRowP211(row[2], row[3], row[6], row[9], row[15], row[16])
 
             json_text = json.dumps(table_row, ensure_ascii=False, default=my_default)
             print(json_text)

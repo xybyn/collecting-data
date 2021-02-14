@@ -29,11 +29,13 @@ class Direction:
 
 
 class TableRowP211:
-    def __init__(self, code, budget_amount, contract_amount, total_fed_amount):
+    def __init__(self, code, budget_amount, contract_amount, total_fed_amount, gr_contract_amount, women_amount):
         self.code = code
         self.budget_amount = budget_amount
         self.contract_amount = contract_amount
         self.total_fed_amount = total_fed_amount
+        self.gr_contract_amount = gr_contract_amount
+        self.women_amount = women_amount
 
 
 class TableRowP2121:
@@ -118,7 +120,9 @@ def my_default(obj):
             "code": obj.code,
             "budget_amount": obj.budget_amount,
             "contract_amount": obj.contract_amount,
-            "total_fed_amount": obj.total_fed_amount
+            "total_fed_amount": obj.total_fed_amount,
+            "gr_contract_amount": obj.gr_contract_amount,
+            "women_amount": obj.women_amount
         }
     if isinstance(obj, TableRowP2121):
         return {
@@ -130,7 +134,7 @@ def my_default(obj):
             "code": obj.code,
             "contract_amount": obj.contract_amount,
             "total_fed_amount": obj.total_fed_amount,
-            "women_amount": obj.women_amount,
+            "women_amount": obj.women_amount
         }
 
     if isinstance(obj, TableRowP213):
@@ -138,6 +142,7 @@ def my_default(obj):
             "code": obj.code,
             "total_grad_amount": obj.total_grad_amount,
             "magistracy_amount": obj.magistracy_amount,
+            "total_fed_amount": obj.total_fed_amount,
             "contract_amount": obj.contract_amount,
             "women_amount": obj.women_amount
         }
