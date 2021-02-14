@@ -19,6 +19,7 @@ class XLSParser:
         self.P2_1_2_1 = "Р2_1_2(1)"
         self.P2_1_2_4 = "Р2_1_2 (4)"
         self.P2_1_3 = "Р2_1_3(1)"
+        self.graduation_type = ["Бакалавриат", "Специалитет", "Магистратура"]
 
     def parse(self, xls_path):
         self.parse_p2_1_1(xls_path)
@@ -35,6 +36,8 @@ class XLSParser:
             print(f"Sheet {self.P2_1_1} is absent")
             return
 
+        result = []
+
         start = sheet.col_values(0).index('Программы бакалавриата - всего')
         end = sheet.col_values(0).index('Всего по программам бакалавриата, специалитета и магистратуры\r\n(сумма '
                                         'строк 01, 02, 03)')
@@ -47,6 +50,11 @@ class XLSParser:
             json_text = json.dumps(table_row, ensure_ascii=False, default=my_default)
             print(json_text)
 
+            if row[2] != '0':
+                result.append(table_row)
+
+        return result
+
     def parse_p2_1_2_1(self, xls_path):
 
         try:
@@ -54,6 +62,8 @@ class XLSParser:
         except XLRDError:
             print(f"Sheet {self.P2_1_2_1} is absent")
             return
+
+        result = []
 
         start = sheet.col_values(0).index('Программы бакалавриата - всего')
         end = sheet.col_values(0).index('Обучаются второй год на данном курсе, включая находящихся\r\nв академическом '
@@ -66,6 +76,10 @@ class XLSParser:
 
             json_text = json.dumps(table_row, ensure_ascii=False, default=my_default)
             print(json_text)
+            if row[3] != '0':
+                result.append(table_row)
+
+        return result
 
     def parse_p2_1_2_4(self, xls_path):
 
@@ -74,6 +88,8 @@ class XLSParser:
         except XLRDError:
             print(f"Sheet {self.P2_1_2_4} is absent")
             return
+
+        result = []
 
         start = sheet.col_values(0).index('Программы бакалавриата - всего')
         end = sheet.col_values(0).index('Обучаются второй год на данном курсе, включая находящихся\r\nв академическом '
@@ -86,6 +102,10 @@ class XLSParser:
 
             json_text = json.dumps(table_row, ensure_ascii=False, default=my_default)
             print(json_text)
+            if row[3] != '0':
+                result.append(table_row)
+
+        return result
 
     def parse_p2_1_3(self, xls_path):
 
@@ -94,6 +114,8 @@ class XLSParser:
         except XLRDError:
             print(f"Sheet {self.P2_1_3} is absent")
             return
+
+        result = []
 
         start = sheet.col_values(0).index('Программы бакалавриата - всего')
         end = sheet.col_values(0).index('Всего по программам бакалавриата, специалитета и магистратуры (сумма строк '
@@ -106,6 +128,10 @@ class XLSParser:
 
             json_text = json.dumps(table_row, ensure_ascii=False, default=my_default)
             print(json_text)
+            if row[3] != '0':
+                result.append(table_row)
+
+        return result
 
     def parse_p2_12(self, xls_path):
 
@@ -117,8 +143,11 @@ class XLSParser:
             print(f"Sheets {self.P2_12} are absent")
             return
 
-        for sheet_name in book_sh_names:
-            sheet = book.sheet_by_name(sheet_name)
+        result = []
+
+        for i in range(0, 3):
+
+            sheet = book.sheet_by_name(book_sh_names[i])
 
             start = sheet.col_values(0).index('Студенты, обучающиеся на условиях общего приема\r\n- всего (сумма '
                                               'строк 02, 03, 04)')
@@ -127,8 +156,13 @@ class XLSParser:
             for row_num in range(start, end + 1):
                 row = sheet.row_values(row_num)
 
-                table_row = TableRowP212(row[0], row[1], row[2], row[3], row[4], row[5], row[6], row[7], row[8], row[9],
-                                         row[10], row[11], row[12], row[13], row[14], row[15], row[16], row[17])
+                table_row = TableRowP212(self.graduation_type[i], row[0], row[1], row[2], row[3], row[4], row[5],
+                                         row[6], row[7], row[8], row[9], row[10], row[11], row[12], row[13], row[14],
+                                         row[15], row[16], row[17])
 
                 json_text = json.dumps(table_row, ensure_ascii=False, default=my_default)
                 print(json_text)
+                result.append(table_row)
+
+        return result
+
