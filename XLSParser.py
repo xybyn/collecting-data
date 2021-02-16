@@ -7,7 +7,6 @@ from models import *
 
 
 def open_book_sheet(xls_path, sheet):
-
     book = xlrd.open_workbook(xls_path)
 
     sheet = book.sheet_by_name(sheet)
@@ -44,7 +43,7 @@ class XLSParser:
         try:
             start = sheet.col_values(0).index('Программы бакалавриата - всего')
             end = sheet.col_values(0).index('Всего по программам бакалавриата, специалитета и магистратуры\r\n(сумма '
-                                        'строк 01, 02, 03)')
+                                            'строк 01, 02, 03)')
         except ValueError:
             print(f"Sheet {self.P2_1_1} is empty")
             return
@@ -71,12 +70,12 @@ class XLSParser:
 
         try:
             start = sheet.col_values(0).index('Программы бакалавриата - всего')
-            end = sheet.col_values(0).index('Обучаются второй год на данном курсе, включая находящихся\r\nв академическом '
-                                        'отпуске: из строки 03')
+            end = sheet.col_values(0).index(
+                'Обучаются второй год на данном курсе, включая находящихся\r\nв академическом '
+                'отпуске: из строки 03')
         except ValueError:
             print(f"Sheet {self.P2_1_2_1} is empty")
             return
-
 
         for row_num in range(start, end + 1):
             row = sheet.row_values(row_num)
@@ -100,8 +99,9 @@ class XLSParser:
 
         try:
             start = sheet.col_values(0).index('Программы бакалавриата - всего')
-            end = sheet.col_values(0).index('Обучаются второй год на данном курсе, включая находящихся\r\nв академическом '
-                                        'отпуске: из строки 03')
+            end = sheet.col_values(0).index(
+                'Обучаются второй год на данном курсе, включая находящихся\r\nв академическом '
+                'отпуске: из строки 03')
         except ValueError:
             print(f"Sheet {self.P2_1_2_4} is empty")
             return
@@ -128,8 +128,9 @@ class XLSParser:
 
         try:
             start = sheet.col_values(0).index('Программы бакалавриата - всего')
-            end = sheet.col_values(0).index('Всего по программам бакалавриата, специалитета и магистратуры (сумма строк '
-                                        '01, 02, 03)')
+            end = sheet.col_values(0).index(
+                'Всего по программам бакалавриата, специалитета и магистратуры (сумма строк '
+                '01, 02, 03)')
         except ValueError:
             print(f"Sheet {self.P2_1_3} is empty")
             return
@@ -162,7 +163,7 @@ class XLSParser:
 
             try:
                 start = sheet.col_values(0).index('Студенты, обучающиеся на условиях общего приема\r\n- всего (сумма '
-                                              'строк 02, 03, 04)')
+                                                  'строк 02, 03, 04)')
                 end = sheet.col_values(0).index('лица без гражданства')
 
             except ValueError:
@@ -199,9 +200,7 @@ class XLSParser:
                     area.spec = table_p2_12[1]
                     area.magistracy = table_p2_12[2]
 
-                    subjects = self.create_subject_list(codes, os.path.join(dirname, filename))
-
-                    area.subjects = subjects
+                    area.subjects = self.create_subject_list(codes, os.path.join(dirname, filename))
 
                     json_year.areas.append(area)
 
@@ -232,23 +231,7 @@ class XLSParser:
             if table_row_2_1_4 == -1:
                 table_row_2_1_4 = TableRowP2124(code)
 
-            subject = Subject(code.code,
-                              table_row_2_1_1.budget_amount,
-                              table_row_2_1_1.contract_amount,
-                              table_row_2_1_1.total_fed_amount,
-                              table_row_2_1_1.gr_contract_amount,
-                              table_row_2_1_1.women_amount,
-                              table_row_2_1_4.total_fed_amount,
-                              table_row_2_1_4.contract_amount,
-                              table_row_2_1_4.women_amount,
-                              table_row_2_1_3.total_grad_amount,
-                              table_row_2_1_3.magistracy_amount,
-                              table_row_2_1_3.total_fed_amount,
-                              table_row_2_1_3.contract_amount,
-                              table_row_2_1_3.women_amount
-                              )
-
-            subjects.append(subject)
+            subjects.append(Subject(code, table_row_2_1_1, table_row_2_1_4, table_row_2_1_3))
 
         return subjects
 

@@ -98,27 +98,11 @@ class AreaVPO:
 
 
 class Subject:
-    def __init__(self, code, budget_amount_p211, contract_amount_p211, total_fed_amount_p211, gr_contract_amount_p211,
-                 women_amount_p211, total_fed_amount_p2124, contract_amount_p2124, women_amount_p2124,
-                 total_grad_amount_p213, magistracy_amount_p213, total_fed_amount_p213, contract_amount_p213,
-                 women_amount_p213):
+    def __init__(self, code, p211, p2124, p213):
+        self.p211 = p211
+        self.p2124 = p2124
+        self.p213 = p213
         self.code = code
-
-        self.budget_amount_p211 = budget_amount_p211
-        self.contract_amount_p211 = contract_amount_p211
-        self.total_fed_amount_p211 = total_fed_amount_p211
-        self.gr_contract_amount_p211 = gr_contract_amount_p211
-        self.women_amount_p211 = women_amount_p211
-
-        self.total_fed_amount_p2124 = total_fed_amount_p2124
-        self.contract_amount_p2124 = contract_amount_p2124
-        self.women_amount_p2124 = women_amount_p2124
-
-        self.total_grad_amount_p213 = total_grad_amount_p213
-        self.magistracy_amount_p213 = magistracy_amount_p213
-        self.total_fed_amount_p213 = total_fed_amount_p213
-        self.contract_amount_p213 = contract_amount_p213
-        self.women_amount_p213 = women_amount_p213
 
 
 def my_default(obj):
@@ -151,21 +135,15 @@ def my_default(obj):
         }
     if isinstance(obj, TableRowP211):
         return {
-            "code": obj.code,
             "budget_amount": obj.budget_amount,
             "contract_amount": obj.contract_amount,
             "total_fed_amount": obj.total_fed_amount,
             "gr_contract_amount": obj.gr_contract_amount,
             "women_amount": obj.women_amount
         }
-    if isinstance(obj, TableRowP2121):
-        return {
-            "code": obj.code
-        }
 
     if isinstance(obj, TableRowP2124):
         return {
-            "code": obj.code,
             "contract_amount": obj.contract_amount,
             "total_fed_amount": obj.total_fed_amount,
             "women_amount": obj.women_amount
@@ -173,7 +151,6 @@ def my_default(obj):
 
     if isinstance(obj, TableRowP213):
         return {
-            "code": obj.code,
             "total_grad_amount": obj.total_grad_amount,
             "magistracy_amount": obj.magistracy_amount,
             "total_fed_amount": obj.total_fed_amount,
@@ -188,6 +165,14 @@ def my_default(obj):
             "bachelor": obj.bachelor,
             "spec": obj.spec,
             "magistracy": obj.magistracy
+        }
+
+    if isinstance(obj, Subject):
+        return {
+            "code": obj.code,
+            "p211": obj.p211,
+            "p2124": obj.p2124,
+            "p213": obj.p213,
         }
 
     if isinstance(obj, TableRowP212):
@@ -212,23 +197,7 @@ def my_default(obj):
             "g_contract_amount": obj.g_contract_amount
         }
 
-    if isinstance(obj, Subject):
+    if isinstance(obj, TableRowP2121):
         return {
-            "code": obj.code,
-
-            "budget_amount_p211": obj.budget_amount_p211,
-            "contract_amount_p211": obj.contract_amount_p211,
-            "total_fed_amount_p211": obj.total_fed_amount_p211,
-            "gr_contract_amount_p211": obj.gr_contract_amount_p211,
-            "women_amount_p211": obj.women_amount_p211,
-
-            "total_fed_amount_p2124": obj.total_fed_amount_p2124,
-            "contract_amount_p2124": obj.contract_amount_p2124,
-            "women_amount_p2124": obj.women_amount_p2124,
-
-            "total_grad_amount_p213": obj.total_grad_amount_p213,
-            "magistracy_amount_p213": obj.magistracy_amount_p213,
-            "total_fed_amount_p213": obj.total_fed_amount_p213,
-            "contract_amount_p213": obj.contract_amount_p213,
-            "women_amount_p213": obj.women_amount_p213
+            "code": obj.code
         }
