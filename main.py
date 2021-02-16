@@ -9,10 +9,13 @@ def main():
     # unarchive(archives_path, unarchived_path)
 
     # Р2_1_1 Р2_1_2(1) Р2_1_2 (4) Р2_1_3(1) Р2_12(все)
+    # "2013", "2014", "2015", "2016",unarchived/VPO_1_2017/Своды ВПО-1 2017/Государственные
+    years = ["2018", "2019", "2020"]
 
-    XLSParser().parse_p2_12(unarchived_path + "/VPO-1_za_2019_g..rar/ВПО-1 2019/Своды ВПО-1 "
-                                              "2019/Государственные/Амурская область_ГОС_заочная.xls")
-
+    for year in years:
+        print(year)
+        XLSParser().export_year_to_json(unarchived_path + f"VPO_1_{year}/Своды ВПО-1 {year}", year,
+                                        f"yearVPO{year}.json")
 
 
 if __name__ == "__main__":
