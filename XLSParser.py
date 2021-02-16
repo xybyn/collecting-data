@@ -154,7 +154,7 @@ class XLSParser:
             print(f"Sheets {self.P2_12} are absent")
             return
 
-        result = []
+        result = [[], [], []]
 
         for i in range(0, 3):
 
@@ -177,7 +177,7 @@ class XLSParser:
                                          row[15], row[16], row[17])
 
                 if row[2] != 0:
-                    result.append(table_row)
+                    result[i].append(table_row)
 
         return result
 
@@ -193,7 +193,11 @@ class XLSParser:
                 if "очная.xls" in filename and "заочная.xls" not in filename:
                     print(filename)
                     area = AreaVPO(filename.removesuffix('_ГОС_очная.xls'))
-                    area.table_row_p12 = XLSParser().parse_p2_12(os.path.join(dirname, filename))
+
+                    table_p2_12 = XLSParser().parse_p2_12(os.path.join(dirname, filename))
+                    area.bachelor = table_p2_12[0]
+                    area.spec = table_p2_12[1]
+                    area.magistracy = table_p2_12[2]
 
                     subjects = self.create_subject_list(codes, os.path.join(dirname, filename))
 

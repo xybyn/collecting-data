@@ -92,7 +92,9 @@ class AreaVPO:
     def __init__(self, name):
         self.name = name
         self.subjects = []
-        self.table_row_p12 = []
+        self.bachelor = []
+        self.spec = []
+        self.magistracy = []
 
 
 class Subject:
@@ -183,12 +185,13 @@ def my_default(obj):
         return {
             "name": obj.name,
             "subjects": obj.subjects,
-            "table_row_p12": obj.table_row_p12
+            "bachelor": obj.bachelor,
+            "spec": obj.spec,
+            "magistracy": obj.magistracy
         }
 
     if isinstance(obj, TableRowP212):
         return {
-            "graduation_type": obj.graduation_type,
             "country": obj.country,
             "row_number": obj.row_number,
             "code": obj.code,
@@ -213,19 +216,19 @@ def my_default(obj):
         return {
             "code": obj.code,
 
-            "self.budget_amount_p211": obj.budget_amount_p211,
-            "self.contract_amount_p211": obj.contract_amount_p211,
-            "self.total_fed_amount_p211": obj.total_fed_amount_p211,
-            "self.gr_contract_amount_p211": obj.gr_contract_amount_p211,
-            "self.women_amount_p211": obj.women_amount_p211,
+            "budget_amount_p211": obj.budget_amount_p211,
+            "contract_amount_p211": obj.contract_amount_p211,
+            "total_fed_amount_p211": obj.total_fed_amount_p211,
+            "gr_contract_amount_p211": obj.gr_contract_amount_p211,
+            "women_amount_p211": obj.women_amount_p211,
 
-            "self.total_fed_amount_p2124": obj.total_fed_amount_p2124,
-            "self.contract_amount_p2124": obj.contract_amount_p2124,
-            "self.women_amount_p2124": obj.women_amount_p2124,
+            "total_fed_amount_p2124": obj.total_fed_amount_p2124,
+            "contract_amount_p2124": obj.contract_amount_p2124,
+            "women_amount_p2124": obj.women_amount_p2124,
 
-            "self.total_grad_amount_p213": obj.total_grad_amount_p213,
-            "self.magistracy_amount_p213": obj.magistracy_amount_p213,
-            "self.total_fed_amount_p213": obj.total_fed_amount_p213,
-            "self.contract_amount_p213": obj.contract_amount_p213,
-            "self.women_amount_p213": obj.women_amount_p213
+            "total_grad_amount_p213": obj.total_grad_amount_p213,
+            "magistracy_amount_p213": obj.magistracy_amount_p213,
+            "total_fed_amount_p213": obj.total_fed_amount_p213,
+            "contract_amount_p213": obj.contract_amount_p213,
+            "women_amount_p213": obj.women_amount_p213
         }
