@@ -42,6 +42,6 @@ class GovEduParser:
 
             files = self.get_file_links(report_links[i])
             for file in files:
-                download_typed_file_by_link(file['link'], os.path.join(save_path, folder_name), file['type'])
+                download_typed_file_by_link(file['link'][:-1], os.path.join(save_path, folder_name), file['type'])
 
 
