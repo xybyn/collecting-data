@@ -7,7 +7,6 @@ from models import *
 
 
 def open_book_sheet(xls_path, sheet):
-
     book = xlrd.open_workbook(xls_path)
 
     sheet = book.sheet_by_name(sheet)
@@ -44,7 +43,7 @@ class XLSParser:
         try:
             start = sheet.col_values(0).index('Программы бакалавриата - всего')
             end = sheet.col_values(0).index('Всего по программам бакалавриата, специалитета и магистратуры\r\n(сумма '
-                                        'строк 01, 02, 03)')
+                                            'строк 01, 02, 03)')
         except ValueError:
             print(f"Sheet {self.P2_1_1} is empty")
             return
@@ -71,12 +70,12 @@ class XLSParser:
 
         try:
             start = sheet.col_values(0).index('Программы бакалавриата - всего')
-            end = sheet.col_values(0).index('Обучаются второй год на данном курсе, включая находящихся\r\nв академическом '
-                                        'отпуске: из строки 03')
+            end = sheet.col_values(0).index(
+                'Обучаются второй год на данном курсе, включая находящихся\r\nв академическом '
+                'отпуске: из строки 03')
         except ValueError:
             print(f"Sheet {self.P2_1_2_1} is empty")
             return
-
 
         for row_num in range(start, end + 1):
             row = sheet.row_values(row_num)
@@ -100,8 +99,9 @@ class XLSParser:
 
         try:
             start = sheet.col_values(0).index('Программы бакалавриата - всего')
-            end = sheet.col_values(0).index('Обучаются второй год на данном курсе, включая находящихся\r\nв академическом '
-                                        'отпуске: из строки 03')
+            end = sheet.col_values(0).index(
+                'Обучаются второй год на данном курсе, включая находящихся\r\nв академическом '
+                'отпуске: из строки 03')
         except ValueError:
             print(f"Sheet {self.P2_1_2_4} is empty")
             return
@@ -128,8 +128,9 @@ class XLSParser:
 
         try:
             start = sheet.col_values(0).index('Программы бакалавриата - всего')
-            end = sheet.col_values(0).index('Всего по программам бакалавриата, специалитета и магистратуры (сумма строк '
-                                        '01, 02, 03)')
+            end = sheet.col_values(0).index(
+                'Всего по программам бакалавриата, специалитета и магистратуры (сумма строк '
+                '01, 02, 03)')
         except ValueError:
             print(f"Sheet {self.P2_1_3} is empty")
             return
@@ -154,7 +155,7 @@ class XLSParser:
             print(f"Sheets {self.P2_12} are absent")
             return
 
-        result = []
+        result = [[], [], []]
 
         for i in range(0, 3):
 
@@ -162,7 +163,7 @@ class XLSParser:
 
             try:
                 start = sheet.col_values(0).index('Студенты, обучающиеся на условиях общего приема\r\n- всего (сумма '
-                                              'строк 02, 03, 04)')
+                                                  'строк 02, 03, 04)')
                 end = sheet.col_values(0).index('лица без гражданства')
 
             except ValueError:
@@ -177,7 +178,7 @@ class XLSParser:
                                          row[15], row[16], row[17])
 
                 if row[2] != 0:
-                    result.append(table_row)
+                    result[i].append(table_row)
 
         return result
 
@@ -193,11 +194,13 @@ class XLSParser:
                 if "очная.xls" in filename and "заочная.xls" not in filename:
                     print(filename)
                     area = AreaVPO(filename.removesuffix('_ГОС_очная.xls'))
-                    area.table_row_p12 = XLSParser().parse_p2_12(os.path.join(dirname, filename))
 
-                    subjects = self.create_subject_list(codes, os.path.join(dirname, filename))
+                    table_p2_12 = XLSParser().parse_p2_12(os.path.join(dirname, filename))
+                    area.bachelor = table_p2_12[0]
+                    area.spec = table_p2_12[1]
+                    area.magistracy = table_p2_12[2]
 
-                    area.subjects = subjects
+                    area.subjects = self.create_subject_list(codes, os.path.join(dirname, filename))
 
                     json_year.areas.append(area)
 
@@ -228,23 +231,7 @@ class XLSParser:
             if table_row_2_1_4 == -1:
                 table_row_2_1_4 = TableRowP2124(code)
 
-            subject = Subject(code.code,
-                              table_row_2_1_1.budget_amount,
-                              table_row_2_1_1.contract_amount,
-                              table_row_2_1_1.total_fed_amount,
-                              table_row_2_1_1.gr_contract_amount,
-                              table_row_2_1_1.women_amount,
-                              table_row_2_1_4.total_fed_amount,
-                              table_row_2_1_4.contract_amount,
-                              table_row_2_1_4.women_amount,
-                              table_row_2_1_3.total_grad_amount,
-                              table_row_2_1_3.magistracy_amount,
-                              table_row_2_1_3.total_fed_amount,
-                              table_row_2_1_3.contract_amount,
-                              table_row_2_1_3.women_amount
-                              )
-
-            subjects.append(subject)
+            subjects.append(Subject(code, table_row_2_1_1, table_row_2_1_4, table_row_2_1_3))
 
         return subjects
 
