@@ -1,5 +1,6 @@
 from utils import *
 from XLSParser import *
+from MinobrParser import *
 
 
 def main():
@@ -16,7 +17,6 @@ def main():
         print(year)
         XLSParser().export_year_to_json(unarchived_path + f"VPO_1_{year}/Своды ВПО-1 {year}", year,
                                         f"yearVPO{year}.json")
-
 
 if __name__ == "__main__":
     main()

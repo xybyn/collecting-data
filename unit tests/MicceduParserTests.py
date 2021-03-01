@@ -1,7 +1,7 @@
 import os
 import unittest
-import MicceduParser
-
+from MicceduParser import *
+from utils import *
 
 class MicceduParserTests(unittest.TestCase):
     def setUp(self):
@@ -691,7 +691,7 @@ class MicceduParserTests(unittest.TestCase):
     def export_2015_year_to_json(self):
         result = self.parser.export_year_to_json("http://indicators.miccedu.ru/monitoring/2015", os.path.join(os.getcwd(), "new2015.json"))
         self.assertTrue(True)
-    def export_2019_year_to_json(self):
+    def test_export_2019_year_to_json(self):
         result = self.parser.export_year_to_json("http://indicators.miccedu.ru/monitoring/2019/index.php?m=vpo", os.path.join(os.getcwd(), "new2019.json"))
         self.assertTrue(True)
 

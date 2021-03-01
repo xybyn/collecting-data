@@ -90,6 +90,10 @@ def get_table_by_class(soup, class_name):
     return table
 
 
+def get_table_by_style(soup, style):
+    table = soup.find_all('table', {"style": style})
+    return table
+
 def get_table_by_id(soup, id):
     table = soup.find_all('table', {"id": id})
     return table
@@ -106,6 +110,8 @@ def extract_data_from_collection(hrefs, pattern):
 
 
 def get_file_name(file_path):
+    if file_path.endswith('/'):
+        file_path = file_path[:-1]
     split_path = file_path.split('/')
     return split_path[-1]
 
@@ -118,6 +124,19 @@ def download_file(url_origin, file_path_on_site, path_to_save):
     urllib.request.urlretrieve(full_file_path_on_site, save_path)
     print(f"downloaded: {file_name}")
 
+def download_file_by_link(link, path_to_save):
+    file_name = get_file_name(link)+".xls"
+    save_path = os.path.join(path_to_save, file_name)
+    print(f"downloading: {file_name}")
+    urllib.request.urlretrieve(link, save_path)
+    print(f"downloaded: {file_name}")
+
+def download_typed_file_by_link(link, path_to_save, type):
+    file_name = get_file_name(link)+"."+type
+    save_path = os.path.join(path_to_save, file_name)
+    print(f"downloading: {file_name}")
+    urllib.request.urlretrieve(link, save_path)
+    print(f"downloaded: {file_name}")
 
 def download_files(url_origin, file_paths_on_site, path_to_save):
     for file_path_on_site in file_paths_on_site:
