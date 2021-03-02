@@ -1,10 +1,11 @@
-from utils import *
-from XLSParser import *
-from MinobrParser import *
+from GovEduParser import *
+from XLSParserSPO import XLSParserSPO
 
 
 def main():
     archives_path = os.path.join(os.getcwd()) + "\\archives\\"
+    gov_path = os.path.join(os.getcwd()) + "\\gov\\"
+    gov_unarch_path = os.path.join(os.getcwd()) + "\\gov_unarch\\"
     unarchived_path = os.path.join(os.getcwd()) + "\\unarchived\\"
 
     # unarchive(archives_path, unarchived_path)
@@ -15,8 +16,11 @@ def main():
 
     for year in years:
         print(year)
-        XLSParser().export_year_to_json(unarchived_path + f"VPO_1_{year}/Своды ВПО-1 {year}", year,
-                                        f"yearVPO{year}.json")
+        XLSParserSPO().export_year_to_json(gov_path + f"{year}\\Своды СПО-1 {year}\\Государственные", year,
+                                           f"yearSPO{year}.json")
+
+    # unarchive(gov_path + f"folder {12}\\", gov_unarch_path)
+
 
 if __name__ == "__main__":
     main()

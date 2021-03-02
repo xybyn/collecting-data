@@ -1,24 +1,21 @@
 import json
-import os
 
 import xlrd
 from xlrd import XLRDError
+
 from models import *
-
-
-def open_book_sheet(xls_path, sheet):
-    book = xlrd.open_workbook(xls_path)
-
-    sheet = book.sheet_by_name(sheet)
-
-    return sheet
+from utils import *
 
 
 class XLSParser:
     def __init__(self):
         self.P2_12 = "Р2_12"
+        self.P2_5 = "Р2_5"
+        self.P2_10 = "Р2_10"
         self.P2_1_1 = "Р2_1_1"
         self.P2_1_2_1 = "Р2_1_2(1)"
+        self.P2_1_2 = "Р2_1_2"
+        self.P2_1_2P = "Р2_1_2_П"
         self.P2_1_2_4 = "Р2_1_2 (4)"
         self.P2_1_3 = "Р2_1_3(1)"
         self.graduation_type = ["Бакалавриат", "Специалитет", "Магистратура"]
@@ -80,7 +77,7 @@ class XLSParser:
         for row_num in range(start, end + 1):
             row = sheet.row_values(row_num)
 
-            table_row = TableRowP2121(row[3])
+            table_row = TableRowP2121(row[0], row[3])
 
             if row[3] != 0:
                 result.append(table_row)
@@ -231,7 +228,7 @@ class XLSParser:
             if table_row_2_1_4 == -1:
                 table_row_2_1_4 = TableRowP2124(code)
 
-            subjects.append(Subject(code, table_row_2_1_1, table_row_2_1_4, table_row_2_1_3))
+            subjects.append(Subject(code.code, table_row_2_1_1, table_row_2_1_4, table_row_2_1_3))
 
         return subjects
 
@@ -242,6 +239,207 @@ class XLSParser:
 
         for row in table:
             if row.code == code.code:
+                table_row = row
+                return table_row
+
+        return -1
+
+    def parse_p2_1_1_old(self, xls_path):
+
+        try:
+            sheet = open_book_sheet(xls_path, self.P2_1_1)
+        except XLRDError:
+            print(f"Sheet {self.P2_1_1} is absent")
+            return
+
+        result = []
+
+        try:
+            start = sheet.col_values(0).index('Программы бакалавриата - всего')
+            end = sheet.col_values(0).index('Всего по программам высшего образования (сумма строк 01, 05, 09)')
+        except ValueError:
+            print(f"Sheet {self.P2_1_1} is empty")
+            return
+
+        for row_num in range(start, end + 1):
+            row = sheet.row_values(row_num)
+
+            table_row = TableRowOldP211(row[0], row[2], row[3], row[5], row[8])
+
+            if row[2] != 0:
+                result.append(table_row)
+
+        return result
+
+    def parse_p2_1_2_old(self, xls_path):
+
+        try:
+            sheet = open_book_sheet(xls_path, self.P2_1_2)
+        except XLRDError:
+            print(f"Sheet {self.P2_1_2} is absent")
+            return
+
+        result = []
+
+        try:
+            start = sheet.col_values(0).index('Программы бакалавриата - всего')
+            end = sheet.col_values(0).index('Всего по программам высшего образования (сумма строк 01, 06, 11)')
+        except ValueError:
+            print(f"Sheet {self.P2_1_2} is empty")
+            return
+
+        for row_num in range(start, end + 1):
+            row = sheet.row_values(row_num)
+
+            table_row = TableRowOldP212(row[0], row[2], row[3], row[19], row[20])
+
+            if row[2] != 0:
+                result.append(table_row)
+
+        return result
+
+    def parse_p2_1_2p_old(self, xls_path):
+
+        try:
+            sheet = open_book_sheet(xls_path, self.P2_1_2P)
+        except XLRDError:
+            print(f"Sheet {self.P2_1_2P} is absent")
+            return
+
+        result = []
+
+        try:
+            start = sheet.col_values(0).index('Программы бакалавриата - всего')
+            end = sheet.col_values(0).index('Всего по программам высшего образования (сумма строк 01, 06, 11)')
+        except ValueError:
+            print(f"Sheet {self.P2_1_2P} is empty")
+            return
+
+        for row_num in range(start, end + 1):
+            row = sheet.row_values(row_num)
+
+            table_row = TableRowOldP212P(row[0], row[2], row[3], row[6], row[7], row[9])
+
+            if row[2] != 0:
+                result.append(table_row)
+
+        return result
+
+    def parse_p2_5_old(self, xls_path):
+
+        try:
+            sheet = open_book_sheet(xls_path, self.P2_5)
+        except XLRDError:
+            print(f"Sheet {self.P2_5} is absent")
+            return
+
+        result = []
+
+        try:
+            start = sheet.col_values(0).index('Прием')
+            end = sheet.col_values(0).index('Выпуск')
+        except ValueError:
+            print(f"Sheet {self.P2_5} is empty")
+            return
+
+        for row_num in range(start, end + 1):
+            row = sheet.row_values(row_num)
+
+            table_row = TableRowOldP25(row[0], row[6])
+
+            result.append(table_row)
+
+        return result
+
+    def parse_p2_10_old(self, xls_path):
+
+        try:
+            sheet = open_book_sheet(xls_path, self.P2_10)
+        except XLRDError:
+            print(f"Sheet {self.P2_10} is absent")
+            return
+
+        result = []
+
+        try:
+            start = sheet.col_values(0).index('Студенты, обучающиеся на условиях общего приема - всего (сумма строк '
+                                              '02, 03, 04)')
+            end = sheet.col_values(0).index('Кроме того: Лица без гражданства, обучающиеся по международным '
+                                            'договорам')
+        except ValueError:
+            print(f"Sheet {self.P2_10} is empty")
+            return
+
+        for row_num in range(start, end + 1):
+            row = sheet.row_values(row_num)
+
+            table_row = TableRowOldP210(row[0], row[1], row[2], row[3], row[4], row[5],
+                                        row[6], row[7], row[8], row[9], row[10], row[11])
+
+            if row[2] != 0:
+                result.append(table_row)
+
+        return result
+
+    def export_year_to_json_old(self, path, year, json_path):
+        json_year = Year(year)
+
+        codes = self.parse_p2_1_2_old(path + "/../СВОД_ВПО1_ГОС_очная.xls")
+
+        for dirname, dirnames, filenames in os.walk(path):
+
+            for filename in filenames:
+
+                if "Очная.xls" in filename and "Заочная.xls" not in filename:
+                    print(filename)
+                    area = AreaOldVPO(filename.removesuffix('_ГОС_очная.xls'))
+
+                    area.old_subjects = self.create_subject_list_old(codes, os.path.join(dirname, filename))
+
+                    area.old_p25 = XLSParser().parse_p2_5_old(os.path.join(dirname, filename))
+                    area.old_p210 = XLSParser().parse_p2_10_old(os.path.join(dirname, filename))
+
+                    json_year.areas.append(area)
+
+        json_text = json.dumps(json_year, ensure_ascii=False, default=my_default)
+        file = open(json_path, "w", encoding="utf-8")
+        file.write(json_text)
+        file.close()
+
+    def create_subject_list_old(self, codes, path):
+
+        old_subjects = []
+
+        table_p_2_1_2_old = XLSParser().parse_p2_1_2_old(path)
+        table_p_2_1_2p_old = XLSParser().parse_p2_1_2p_old(path)
+        table_p_2_1_1_old = XLSParser().parse_p2_1_1_old(path)
+
+        for code in codes:
+            table_row_p_2_1_2_old = self.find_row_by_code_old(table_p_2_1_2_old, code)
+            table_row_p_2_1_2p_old = self.find_row_by_code_old(table_p_2_1_2p_old, code)
+            table_row_p_2_1_1_old = self.find_row_by_code_old(table_p_2_1_1_old, code)
+
+            if table_row_p_2_1_2_old == -1:
+                table_row_p_2_1_2_old = TableRowOldP212(code.name, code.classification, code.code)
+
+            if table_row_p_2_1_2p_old == -1:
+                table_row_p_2_1_2p_old = TableRowOldP212P(code.name, code.classification, code.code)
+
+            if table_row_p_2_1_1_old == -1:
+                table_row_p_2_1_1_old = TableRowOldP211(code.name, code.code)
+
+            old_subjects.append(OldSubject(code.code, table_row_p_2_1_1_old, table_row_p_2_1_2_old,
+                                           table_row_p_2_1_2p_old))
+
+        return old_subjects
+
+    def find_row_by_code_old(self, table, code):
+
+        if table is None:
+            return -1
+
+        for row in table:
+            if row.code == code:
                 table_row = row
                 return table_row
 
