@@ -1,4 +1,6 @@
 .idea
 archives
 unarchived
-venv/pyvenv.cfg
+gov
+gov_unarch
+*.json

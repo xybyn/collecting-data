@@ -40,8 +40,61 @@ class TableRowP211:
 
 
 class TableRowP2121:
-    def __init__(self, code):
+    def __init__(self, name, code):
+        self.name = name
         self.code = code
+
+
+class TableRowOldP211:
+    def __init__(self, name, code, total_amount=0, total_fed_amount=0, contract_amount=0):
+        self.name = name
+        self.code = code
+        self.total_amount = total_amount
+        self.total_fed_amount = total_fed_amount
+        self.contract_amount = contract_amount
+
+
+class TableRowOldP212:
+    def __init__(self, name, classification, code, total_fed_amount=0, contract_amount=0):
+        self.name = name
+        self.classification = classification
+        self.code = code
+        self.total_fed_amount = total_fed_amount
+        self.contract_amount = contract_amount
+
+
+class TableRowOldP212P:
+    def __init__(self, name, classification, code, total_fed_amount=0, contract_amount=0, women_amount=0):
+        self.name = name
+        self.classification = classification
+        self.code = code
+        self.total_fed_amount = total_fed_amount
+        self.contract_amount = contract_amount
+        self.women_amount = women_amount
+
+
+class TableRowOldP25:
+    def __init__(self, name, amount):
+        self.name = name
+        self.amount = amount
+
+
+class TableRowOldP210:
+    def __init__(self, country, row_number, code, accepted_students_amount, a_fed_budget, a_rf_budget,
+                 total_students_amount, t_fed_budget, t_rf_budget,
+                 grad_students_amount, g_fed_budget, g_rf_budget):
+        self.country = country
+        self.row_number = row_number
+        self.code = code
+        self.accepted_students_amount = accepted_students_amount
+        self.a_fed_budget = a_fed_budget
+        self.a_rf_budget = a_rf_budget
+        self.total_students_amount = total_students_amount
+        self.t_fed_budget = t_fed_budget
+        self.t_rf_budget = t_rf_budget
+        self.grad_students_amount = grad_students_amount
+        self.g_fed_budget = g_fed_budget
+        self.g_rf_budget = g_rf_budget
 
 
 class TableRowP2124:
@@ -92,31 +145,33 @@ class AreaVPO:
     def __init__(self, name):
         self.name = name
         self.subjects = []
-        self.table_row_p12 = []
+        self.bachelor = []
+        self.spec = []
+        self.magistracy = []
 
 
 class Subject:
-    def __init__(self, code, budget_amount_p211, contract_amount_p211, total_fed_amount_p211, gr_contract_amount_p211,
-                 women_amount_p211, total_fed_amount_p2124, contract_amount_p2124, women_amount_p2124,
-                 total_grad_amount_p213, magistracy_amount_p213, total_fed_amount_p213, contract_amount_p213,
-                 women_amount_p213):
+    def __init__(self, code, p211, p2124, p213):
+        self.p211 = p211
+        self.p2124 = p2124
+        self.p213 = p213
         self.code = code
 
-        self.budget_amount_p211 = budget_amount_p211
-        self.contract_amount_p211 = contract_amount_p211
-        self.total_fed_amount_p211 = total_fed_amount_p211
-        self.gr_contract_amount_p211 = gr_contract_amount_p211
-        self.women_amount_p211 = women_amount_p211
 
-        self.total_fed_amount_p2124 = total_fed_amount_p2124
-        self.contract_amount_p2124 = contract_amount_p2124
-        self.women_amount_p2124 = women_amount_p2124
+class OldSubject:
+    def __init__(self, code, old_p211, old_p212, old_p212P):
+        self.old_p211 = old_p211
+        self.old_p212 = old_p212
+        self.old_p212P = old_p212P
+        self.code = code
 
-        self.total_grad_amount_p213 = total_grad_amount_p213
-        self.magistracy_amount_p213 = magistracy_amount_p213
-        self.total_fed_amount_p213 = total_fed_amount_p213
-        self.contract_amount_p213 = contract_amount_p213
-        self.women_amount_p213 = women_amount_p213
+
+class AreaOldVPO:
+    def __init__(self, name):
+        self.name = name
+        self.old_subjects = []
+        self.old_p25 = []
+        self.old_p210 = []
 
 
 def my_default(obj):
@@ -149,21 +204,15 @@ def my_default(obj):
         }
     if isinstance(obj, TableRowP211):
         return {
-            "code": obj.code,
             "budget_amount": obj.budget_amount,
             "contract_amount": obj.contract_amount,
             "total_fed_amount": obj.total_fed_amount,
             "gr_contract_amount": obj.gr_contract_amount,
             "women_amount": obj.women_amount
         }
-    if isinstance(obj, TableRowP2121):
-        return {
-            "code": obj.code
-        }
 
     if isinstance(obj, TableRowP2124):
         return {
-            "code": obj.code,
             "contract_amount": obj.contract_amount,
             "total_fed_amount": obj.total_fed_amount,
             "women_amount": obj.women_amount
@@ -171,7 +220,6 @@ def my_default(obj):
 
     if isinstance(obj, TableRowP213):
         return {
-            "code": obj.code,
             "total_grad_amount": obj.total_grad_amount,
             "magistracy_amount": obj.magistracy_amount,
             "total_fed_amount": obj.total_fed_amount,
@@ -183,12 +231,37 @@ def my_default(obj):
         return {
             "name": obj.name,
             "subjects": obj.subjects,
-            "table_row_p12": obj.table_row_p12
+            "bachelor": obj.bachelor,
+            "spec": obj.spec,
+            "magistracy": obj.magistracy
+        }
+
+    if isinstance(obj, AreaOldVPO):
+        return {
+            "name": obj.name,
+            "subjects": obj.old_subjects,
+            "old_p25": obj.old_p25,
+            "old_p210": obj.old_p210
+        }
+
+    if isinstance(obj, Subject):
+        return {
+            "code": obj.code,
+            "p211": obj.p211,
+            "p2124": obj.p2124,
+            "p213": obj.p213,
+        }
+
+    if isinstance(obj, OldSubject):
+        return {
+            "code": obj.code,
+            "old_p211": obj.old_p211,
+            "old_p212": obj.old_p212,
+            "old_p212P": obj.old_p212P,
         }
 
     if isinstance(obj, TableRowP212):
         return {
-            "graduation_type": obj.graduation_type,
             "country": obj.country,
             "row_number": obj.row_number,
             "code": obj.code,
@@ -209,23 +282,58 @@ def my_default(obj):
             "g_contract_amount": obj.g_contract_amount
         }
 
-    if isinstance(obj, Subject):
+    if isinstance(obj, TableRowP2121):
         return {
+            "name": obj.name,
+            "code": obj.code
+        }
+
+    if isinstance(obj, TableRowOldP211):
+        return {
+            "name": obj.name,
             "code": obj.code,
+            "total_amount": obj.total_amount,
+            "total_fed_amount": obj.total_fed_amount,
+            "contract_amount": obj.contract_amount
+        }
 
-            "budget_amount_p211": obj.budget_amount_p211,
-            "contract_amount_p211": obj.contract_amount_p211,
-            "total_fed_amount_p211": obj.total_fed_amount_p211,
-            "gr_contract_amount_p211": obj.gr_contract_amount_p211,
-            "women_amount_p211": obj.women_amount_p211,
+    if isinstance(obj, TableRowOldP212):
+        return {
+            "name": obj.name,
+            "classification": obj.classification,
+            "code": obj.code,
+            "total_fed_amount": obj.total_fed_amount,
+            "contract_amount": obj.contract_amount
+        }
 
-            "total_fed_amount_p2124": obj.total_fed_amount_p2124,
-            "contract_amount_p2124": obj.contract_amount_p2124,
-            "women_amount_p2124": obj.women_amount_p2124,
+    if isinstance(obj, TableRowOldP212P):
+        return {
+            "name": obj.name,
+            "classification": obj.classification,
+            "code": obj.code,
+            "total_fed_amount": obj.total_fed_amount,
+            "contract_amount": obj.contract_amount,
+            "women_amount": obj.women_amount,
+        }
 
-            "total_grad_amount_p213": obj.total_grad_amount_p213,
-            "magistracy_amount_p213": obj.magistracy_amount_p213,
-            "total_fed_amount_p213": obj.total_fed_amount_p213,
-            "contract_amount_p213": obj.contract_amount_p213,
-            "women_amount_p213": obj.women_amount_p213
+    if isinstance(obj, TableRowOldP25):
+        return {
+            "name": obj.name,
+            "code": obj.amount
+        }
+
+    if isinstance(obj, TableRowOldP210):
+        return {
+            "country": obj.country,
+            "row_number": obj.row_number,
+            "code": obj.code,
+            "accepted_students_amount": obj.accepted_students_amount,
+            "a_fed_budget": obj.a_fed_budget,
+            "a_rf_budget": obj.a_rf_budget,
+            "total_students_amount": obj.total_students_amount,
+            "t_fed_budget": obj.t_fed_budget,
+            "t_rf_budget": obj.t_rf_budget,
+            "grad_students_amount": obj.grad_students_amount,
+            "g_fed_budget": obj.g_fed_budget,
+            "g_rf_budget": obj.g_rf_budget,
         }

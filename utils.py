@@ -1,10 +1,14 @@
 import re
 import urllib.request
+import zipfile
+
 import requests
 from bs4 import BeautifulSoup
 import os
 from threading import Thread
 import gevent.monkey
+import shutil
+
 from pyunpack import Archive
 
 
@@ -94,6 +98,7 @@ def get_table_by_style(soup, style):
     table = soup.find_all('table', {"style": style})
     return table
 
+
 def get_table_by_id(soup, id):
     table = soup.find_all('table', {"id": id})
     return table
@@ -124,19 +129,22 @@ def download_file(url_origin, file_path_on_site, path_to_save):
     urllib.request.urlretrieve(full_file_path_on_site, save_path)
     print(f"downloaded: {file_name}")
 
+
 def download_file_by_link(link, path_to_save):
-    file_name = get_file_name(link)+".xls"
+    file_name = get_file_name(link) + ".xls"
     save_path = os.path.join(path_to_save, file_name)
     print(f"downloading: {file_name}")
     urllib.request.urlretrieve(link, save_path)
     print(f"downloaded: {file_name}")
 
+
 def download_typed_file_by_link(link, path_to_save, type):
-    file_name = get_file_name(link)+"."+type
+    file_name = get_file_name(link) + "." + type
     save_path = os.path.join(path_to_save, file_name)
     print(f"downloading: {file_name}")
     urllib.request.urlretrieve(link, save_path)
     print(f"downloaded: {file_name}")
+
 
 def download_files(url_origin, file_paths_on_site, path_to_save):
     for file_path_on_site in file_paths_on_site:
@@ -164,8 +172,24 @@ def download_files_async(url_origin, file_paths_on_site, path_to_save):
 def unarchive(archives_path, path_to_save):
     archives = os.listdir(archives_path)
     for archive in archives:
-        archive_name_without_extension = re.sub(r'\..*', '', str(archive))
-        dir_name = os.path.join(path_to_save, archive_name_without_extension)
-        os.mkdir(dir_name)
-        Archive(os.path.join(archives_path,archive)).extractall(dir_name)
-        print(f"{archive} unarchived")
+        if archive.endswith(".zip") or archive.endswith(".rar"):
+            os.mkdir(path_to_save + archive.removesuffix(".*(rar|zip)"))
+            path = path_to_save + archive.removesuffix(".*(rar|zip)")
+            unpack_zipfile(archives_path + archive, path, 'cp866')
+            print(f"{archive} unarchived")
+
+
+def unpack_zipfile(filename, extract_dir, encoding='cp437'):
+    with zipfile.ZipFile(filename) as archive:
+        for entry in archive.infolist():
+            name = entry.filename.encode('cp437').decode(encoding)  # reencode!!!
+
+            # don't extract absolute paths or ones with .. in them
+            if name.startswith('/') or '..' in name:
+                continue
+
+            target = os.path.join(extract_dir, *name.split('/'))
+            os.makedirs(os.path.dirname(target), exist_ok=True)
+            if not entry.is_dir():  # file
+                with archive.open(entry) as source, open(target, 'wb') as dest:
+                    shutil.copyfileobj(source, dest)
