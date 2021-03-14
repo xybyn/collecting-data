@@ -99,7 +99,6 @@ def get_table_by_style(soup, style):
     table = soup.find_all('table', {"style": style})
     return table
 
-
 def get_table_by_id(soup, id):
     table = soup.find_all('table', {"id": id})
     return table
