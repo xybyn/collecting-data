@@ -160,15 +160,15 @@ class XLSParserSPO:
                     print(filename)
                     area = AreaSPO(filename.removesuffix('_ГОС_очная.xls'))
 
-                    area.p211 = XLSParserSPO().parse_p2_1_1(os.path.join(dirname, filename))
-                    area.p2121 = XLSParserSPO().parse_p2_1_2_1(os.path.join(dirname, filename))
-                    area.p2124 = XLSParserSPO().parse_p2_1_2_4(os.path.join(dirname, filename))
-                    area.p2141 = XLSParserSPO().parse_p2_1_4_1(os.path.join(dirname, filename))
-                    area.p2142 = XLSParserSPO().parse_p2_1_4_2(os.path.join(dirname, filename))
+                    area.p211.append(XLSParserSPO().parse_p2_1_1(os.path.join(dirname, filename)))
+                    area.p2121.append(XLSParserSPO().parse_p2_1_2_1(os.path.join(dirname, filename)))
+                    area.p2124.append(XLSParserSPO().parse_p2_1_2_4(os.path.join(dirname, filename)))
+                    area.p2141.append(XLSParserSPO().parse_p2_1_4_1(os.path.join(dirname, filename)))
+                    area.p2142.append(XLSParserSPO().parse_p2_1_4_2(os.path.join(dirname, filename)))
 
                     json_year.areas.append(area)
 
-        json_text = json.dumps(json_year, ensure_ascii=False, default=my_default_SPO).replace('[', '').replace(']', '')
+        json_text = json.dumps(json_year, ensure_ascii=False, default=my_default_SPO)
         file = open(json_path, "w", encoding="utf-8")
         file.write(json_text)
         file.close()
