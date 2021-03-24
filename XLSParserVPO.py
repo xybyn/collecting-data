@@ -3,7 +3,7 @@ import json
 import xlrd
 from xlrd import XLRDError
 
-from models import *
+from modelsVPO import *
 from utils import *
 
 
@@ -228,7 +228,7 @@ class XLSParser:
             if table_row_2_1_4 == -1:
                 table_row_2_1_4 = TableRowP2124(code)
 
-            subjects.append(Subject(code.code, table_row_2_1_1, table_row_2_1_4, table_row_2_1_3))
+            subjects.append(Subject(code.name, code.code, table_row_2_1_1, table_row_2_1_4, table_row_2_1_3))
 
         return subjects
 
@@ -428,7 +428,7 @@ class XLSParser:
             if table_row_p_2_1_1_old == -1:
                 table_row_p_2_1_1_old = TableRowOldP211(code.name, code.code)
 
-            old_subjects.append(OldSubject(code.code, table_row_p_2_1_1_old, table_row_p_2_1_2_old,
+            old_subjects.append(OldSubject(code.name, code.code, table_row_p_2_1_1_old, table_row_p_2_1_2_old,
                                            table_row_p_2_1_2p_old))
 
         return old_subjects

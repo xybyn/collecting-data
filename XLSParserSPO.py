@@ -2,7 +2,7 @@ import json
 
 from xlrd import XLRDError
 
-from SPOmodels import *
+from modelsSPO import *
 from utils import *
 
 

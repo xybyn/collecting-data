@@ -3,7 +3,7 @@ from utils import *
 from openpyxl import Workbook
 import json
 from DataProcessingPipeline import *
-from models import *
+from modelsVPO import *
 
 
 class MicceduParser:

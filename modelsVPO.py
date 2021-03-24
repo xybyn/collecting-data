@@ -151,7 +151,8 @@ class AreaVPO:
 
 
 class Subject:
-    def __init__(self, code, p211, p2124, p213):
+    def __init__(self, name, code, p211, p2124, p213):
+        self.name = name
         self.p211 = p211
         self.p2124 = p2124
         self.p213 = p213
@@ -159,7 +160,8 @@ class Subject:
 
 
 class OldSubject:
-    def __init__(self, code, old_p211, old_p212, old_p212P):
+    def __init__(self, name, code, old_p211, old_p212, old_p212P):
+        self.name = name
         self.old_p211 = old_p211
         self.old_p212 = old_p212
         self.old_p212P = old_p212P
@@ -246,6 +248,7 @@ def my_default(obj):
 
     if isinstance(obj, Subject):
         return {
+            "name": obj.name,
             "code": obj.code,
             "p211": obj.p211,
             "p2124": obj.p2124,
@@ -254,6 +257,7 @@ def my_default(obj):
 
     if isinstance(obj, OldSubject):
         return {
+            "name": obj.name,
             "code": obj.code,
             "old_p211": obj.old_p211,
             "old_p212": obj.old_p212,
