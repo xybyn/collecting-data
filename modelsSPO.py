@@ -93,6 +93,87 @@ class AreaSPO:
         self.p2142 = []
 
 
+class AreaOldSPO:
+    def __init__(self, name):
+        self.name = name
+        self.p211 = []
+        self.p212 = []
+        self.p2122 = []
+        self.p27 = []
+
+
+class TableRowP211OldSPO:
+    def __init__(self, name, str_number, code, applications_submitted, total_accepted, basic_level_amount,
+                 advanced_level, fed_accepted, subject_budget_accepted, local_budget_accepted, full_refund):
+        self.name = name
+        self.str_number = str_number
+        self.code = code
+        self.applications_submitted = applications_submitted
+        self.total_accepted = total_accepted
+        self.basic_level_amount = basic_level_amount
+        self.advanced_level = advanced_level
+        self.fed_accepted = fed_accepted
+        self.subject_budget_accepted = subject_budget_accepted
+        self.local_budget_accepted = local_budget_accepted
+        self.full_refund = full_refund
+
+
+class TableRowP212OldSPO:
+    def __init__(self, name, str_number, code, total_course_1, budget_course_1, total_course_2, budget_course_2,
+                 total_course_3, budget_course_3, total_course_4, budget_course_4, total_course_5, budget_course_5,
+                 total_student_amount, total_course_6, budget_course_6):
+        self.name = name
+        self.str_number = str_number
+        self.code = code
+        self.total_course_1 = total_course_1
+        self.budget_course_1 = budget_course_1
+        self.total_course_2 = total_course_2
+        self.budget_course_2 = budget_course_2
+        self.total_course_3 = total_course_3
+        self.budget_course_3 = budget_course_3
+        self.total_course_4 = total_course_4
+        self.budget_course_4 = budget_course_4
+        self.total_course_5 = total_course_5
+        self.budget_course_5 = budget_course_5
+        self.total_course_6 = total_course_6
+        self.budget_course_6 = budget_course_6
+        self.total_student_amount = total_student_amount
+
+
+class TableRowP2122OldSPO:
+    def __init__(self, name, str_number, code, basic_graduated, advanced_graduated, total_graduated):
+        self.name = name
+        self.str_number = str_number
+        self.code = code
+        self.basic_graduated = basic_graduated
+        self.advanced_graduated = advanced_graduated
+        self.total_graduated = total_graduated
+
+
+class TableRowP27OldSPO:
+    def __init__(self, name, str_number, country_code, total_accepted, budget_accepted, subject_budget_accepted,
+                 full_refund_accepted, total_amount, budget_amount, subject_budget_amount, full_refund_amount,
+                 total_graduated, budget_graduated, subject_budget_graduated, full_refund_graduated):
+        self.name = name
+        self.str_number = str_number
+        self.country_code = country_code
+
+        self.total_accepted = total_accepted
+        self.fed_budget_accepted = budget_accepted
+        self.subject_budget_accepted = subject_budget_accepted
+        self.full_refund_accepted = full_refund_accepted
+
+        self.total_amount = total_amount
+        self.fed_budget_amount = budget_amount
+        self.subject_budget_amount = subject_budget_amount
+        self.full_refund_amount = full_refund_amount
+
+        self.total_graduated = total_graduated
+        self.fed_budget_graduated = budget_graduated
+        self.subject_budget_graduated = subject_budget_graduated
+        self.full_refund_graduated = full_refund_graduated
+
+
 def my_default_SPO(obj):
     if isinstance(obj, TableRowP211SPO):
         return {
@@ -181,4 +262,77 @@ def my_default_SPO(obj):
         return {
             "year": obj.year,
             "areas": obj.areas
+        }
+
+    if isinstance(obj, AreaOldSPO):
+        return {
+            "name": obj.name,
+            "p211": obj.p211,
+            "p212": obj.p212,
+            "p2122": obj.p2122,
+            "p27": obj.p27,
+        }
+
+    if isinstance(obj, TableRowP211OldSPO):
+        return {
+            "name": obj.name,
+            "str_number": obj.str_number,
+            "code": obj.code,
+            "applications_submitted": obj.applications_submitted,
+            "total_accepted": obj.total_accepted,
+            "basic_level_amount ": obj.basic_level_amount,
+            "advanced_level": obj.advanced_level,
+            "fed_accepted": obj.fed_accepted,
+            "subject_budget_accepted": obj.subject_budget_accepted,
+            "local_budget_accepted": obj.local_budget_accepted,
+            "full_refund": obj.full_refund
+        }
+
+    if isinstance(obj, TableRowP212OldSPO):
+        return {
+            "name": obj.name,
+            "str_number": obj.str_number,
+            "code": obj.code,
+            "total_course_1": obj.total_course_1,
+            "budget_course_1": obj.budget_course_1,
+            "total_course_2 ": obj.total_course_2,
+            "budget_course_2": obj.budget_course_2,
+            "total_course_3": obj.total_course_3,
+            "budget_course_3": obj.budget_course_3,
+            "total_course_4": obj.total_course_4,
+            "budget_course_4": obj.budget_course_4,
+            "total_course_5": obj.total_course_5,
+            "budget_course_5": obj.budget_course_5,
+            "total_course_6": obj.total_course_6,
+            "budget_course_6": obj.budget_course_6,
+            "total_student_amount": obj.total_student_amount
+        }
+
+    if isinstance(obj, TableRowP2122OldSPO):
+        return {
+            "name": obj.name,
+            "str_number": obj.str_number,
+            "code": obj.code,
+            "basic_graduated": obj.basic_graduated,
+            "advanced_graduated": obj.advanced_graduated,
+            "total_graduated ": obj.total_graduated
+        }
+
+    if isinstance(obj, TableRowP27OldSPO):
+        return {
+            "name": obj.name,
+            "str_number": obj.str_number,
+            "country_code": obj.country_code,
+            "total_accepted": obj.total_accepted,
+            "fed_budget_accepted": obj.fed_budget_accepted,
+            "subject_budget_accepted ": obj.subject_budget_accepted,
+            "full_refund_accepted ": obj.full_refund_accepted,
+            "total_amount": obj.total_amount,
+            "fed_budget_amount": obj.fed_budget_amount,
+            "subject_budget_amount ": obj.subject_budget_amount,
+            "full_refund_amount ": obj.full_refund_amount,
+            "total_graduated": obj.total_graduated,
+            "fed_budget_graduated": obj.fed_budget_graduated,
+            "subject_budget_graduated ": obj.subject_budget_graduated,
+            "full_refund_graduated ": obj.full_refund_graduated,
         }
