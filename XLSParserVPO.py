@@ -392,7 +392,10 @@ class XLSParser:
 
                 if "Очная.xls" in filename and "Заочная.xls" not in filename:
                     print(filename)
-                    area = AreaOldVPO(filename.removesuffix('_ГОС_очная.xls'))
+                    shortname = filename.removesuffix('_ГОС_Очная.xls')
+                    shortname = shortname.removesuffix('_ГОС_Автономные_Очная.xls')
+                    shortname = shortname.removesuffix('_ГОС_Бюджетные_Очная.xls')
+                    area = AreaOldVPO(shortname)
 
                     area.old_subjects = self.create_subject_list_old(codes, os.path.join(dirname, filename))
 
