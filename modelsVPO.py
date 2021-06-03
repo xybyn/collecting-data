@@ -317,7 +317,7 @@ def my_default(obj):
     if isinstance(obj, TableRowOldP25):
         return {
             "name": obj.name,
-            "code": obj.amount
+            "amount": obj.amount
         }
 
     if isinstance(obj, TableRowOldP210):
