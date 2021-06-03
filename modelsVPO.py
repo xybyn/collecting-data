@@ -160,8 +160,9 @@ class Subject:
 
 
 class OldSubject:
-    def __init__(self, name, code, old_p211, old_p212, old_p212P):
+    def __init__(self, name, code, classification, old_p211, old_p212, old_p212P):
         self.name = name
+        self.classification = classification
         self.old_p211 = old_p211
         self.old_p212 = old_p212
         self.old_p212P = old_p212P
@@ -259,6 +260,7 @@ def my_default(obj):
         return {
             "name": obj.name,
             "code": obj.code,
+            "classification": obj.classification,
             "old_p211": obj.old_p211,
             "old_p212": obj.old_p212,
             "old_p212P": obj.old_p212P,
@@ -294,8 +296,6 @@ def my_default(obj):
 
     if isinstance(obj, TableRowOldP211):
         return {
-            "name": obj.name,
-            "code": obj.code,
             "total_amount": obj.total_amount,
             "total_fed_amount": obj.total_fed_amount,
             "contract_amount": obj.contract_amount
@@ -303,18 +303,12 @@ def my_default(obj):
 
     if isinstance(obj, TableRowOldP212):
         return {
-            "name": obj.name,
-            "classification": obj.classification,
-            "code": obj.code,
             "total_fed_amount": obj.total_fed_amount,
             "contract_amount": obj.contract_amount
         }
 
     if isinstance(obj, TableRowOldP212P):
         return {
-            "name": obj.name,
-            "classification": obj.classification,
-            "code": obj.code,
             "total_fed_amount": obj.total_fed_amount,
             "contract_amount": obj.contract_amount,
             "women_amount": obj.women_amount,

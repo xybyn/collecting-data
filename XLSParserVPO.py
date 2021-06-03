@@ -431,8 +431,8 @@ class XLSParser:
             if table_row_p_2_1_1_old == -1:
                 table_row_p_2_1_1_old = TableRowOldP211(code.name, code.code)
 
-            old_subjects.append(OldSubject(code.name, code.code, table_row_p_2_1_1_old, table_row_p_2_1_2_old,
-                                           table_row_p_2_1_2p_old))
+            old_subjects.append(OldSubject(code.name, code.code, code.classification, table_row_p_2_1_1_old,
+                                           table_row_p_2_1_2_old, table_row_p_2_1_2p_old))
 
         return old_subjects
 
