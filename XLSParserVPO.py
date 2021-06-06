@@ -200,6 +200,8 @@ class XLSParser:
                     area.subjects = self.create_subject_list(codes, os.path.join(dirname, filename))
 
                     json_year.areas.append(area)
+                    break
+
 
         json_text = json.dumps(json_year, ensure_ascii=False, default=my_default)
         file = open(json_path, "w", encoding="utf-8")
@@ -403,6 +405,7 @@ class XLSParser:
                     area.old_p210 = XLSParser().parse_p2_10_old(os.path.join(dirname, filename))
 
                     json_year.areas.append(area)
+                    break
 
         json_text = json.dumps(json_year, ensure_ascii=False, default=my_default)
         file = open(json_path, "w", encoding="utf-8")

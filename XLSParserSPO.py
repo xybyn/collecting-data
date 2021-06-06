@@ -89,7 +89,7 @@ class XLSParserSPO:
         for row_num in range(start, end + 1):
             row = sheet.row_values(row_num)
 
-            table_row = TableRowP2124SPO(row[3], row[4], row[5], row[6], row[7], row[8], row[9],
+            table_row = TableRowP2124SPO(row[0], row[3], row[4], row[5], row[6], row[7], row[8], row[9],
                                          row[10], row[11], row[12], row[13], row[14])
 
             if row[2] != 0:
@@ -170,6 +170,8 @@ class XLSParserSPO:
                     area.p2142 = XLSParserSPO().parse_p2_1_4_2(os.path.join(dirname, filename))
 
                     json_year.areas.append(area)
+
+                    break
 
         json_text = json.dumps(json_year, ensure_ascii=False, default=my_default_SPO)
         file = open(json_path, "w", encoding="utf-8")
@@ -300,6 +302,7 @@ class XLSParserSPO:
                     area.p27 = XLSParserSPO().parse_p2_7_old(os.path.join(dirname, filename))
 
                     json_year.areas.append(area)
+                    break
 
         json_text = json.dumps(json_year, ensure_ascii=False, default=my_default_SPO)
         file = open(json_path, "w", encoding="utf-8")
