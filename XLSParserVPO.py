@@ -5,6 +5,7 @@ from xlrd import XLRDError
 
 from modelsVPO import *
 from utils import *
+import requests
 
 
 class XLSParser:
@@ -200,13 +201,15 @@ class XLSParser:
                     area.subjects = self.create_subject_list(codes, os.path.join(dirname, filename))
 
                     json_year.areas.append(area)
-                    break
 
+                    json_text = json.dumps(json_year, ensure_ascii=False, default=my_default)
+                    headers = {'Content-type': 'application/json', 'Accept': 'application/json'}
+                    r = requests.post("http://192.168.0.12:8080/load/newvpo", data=json_text.encode('utf-8'),
+                                      headers=headers)
+                    print(r.status_code, r.reason)
 
-        json_text = json.dumps(json_year, ensure_ascii=False, default=my_default)
-        file = open(json_path, "w", encoding="utf-8")
-        file.write(json_text)
-        file.close()
+                    json_year.areas.clear()
+
 
     def create_subject_list(self, codes, path):
 
@@ -397,6 +400,7 @@ class XLSParser:
                     shortname = filename.removesuffix('_ГОС_Очная.xls')
                     shortname = shortname.removesuffix('_ГОС_Автономные_Очная.xls')
                     shortname = shortname.removesuffix('_ГОС_Бюджетные_Очная.xls')
+                    shortname = shortname.removesuffix('_ГОС_Казенные_Очная.xls')
                     area = AreaOldVPO(shortname)
 
                     area.old_subjects = self.create_subject_list_old(codes, os.path.join(dirname, filename))
@@ -405,12 +409,16 @@ class XLSParser:
                     area.old_p210 = XLSParser().parse_p2_10_old(os.path.join(dirname, filename))
 
                     json_year.areas.append(area)
-                    break
 
-        json_text = json.dumps(json_year, ensure_ascii=False, default=my_default)
-        file = open(json_path, "w", encoding="utf-8")
-        file.write(json_text)
-        file.close()
+                    json_text = json.dumps(json_year, ensure_ascii=False, default=my_default)
+                    headers = {'Content-type': 'application/json', 'Accept': 'application/json'}
+                    r = requests.post("http://192.168.0.12:8080/load/oldvpo", data=json_text.encode('utf-8'),
+                                      headers=headers)
+                    print(r.status_code, r.reason)
+
+                    json_year.areas.clear()
+
+
 
     def create_subject_list_old(self, codes, path):
 
@@ -434,8 +442,9 @@ class XLSParser:
             if table_row_p_2_1_1_old == -1:
                 table_row_p_2_1_1_old = TableRowOldP211(code.name, code.code)
 
-            old_subjects.append(OldSubject(code.name, code.code, code.classification, table_row_p_2_1_1_old,
-                                           table_row_p_2_1_2_old, table_row_p_2_1_2p_old))
+            old_subjects.append(OldSubject(code.name, code.code, code.classification,
+                                           table_row_p_2_1_1_old, table_row_p_2_1_2_old,
+                                           table_row_p_2_1_2p_old))
 
         return old_subjects
 
@@ -445,8 +454,7 @@ class XLSParser:
             return -1
 
         for row in table:
-            if row.code == code:
-                table_row = row
-                return table_row
+            if row.code == code.code:
+                return row
 
         return -1

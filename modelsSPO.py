@@ -34,10 +34,11 @@ class TableRowP2121SPO:
 
 
 class TableRowP2124SPO:
-    def __init__(self, name, total_accepted, disabled_accepted, basic_level_amount, advanced_level, total_fed_amount,
+    def __init__(self, name, code, total_accepted, disabled_accepted, basic_level_amount, advanced_level, total_fed_amount,
                  disabled_fed_amount, total_subject_amount, disabled_subject_amount, local_budget_amount,
                  contract_amount, women_amount, targeted_education):
         self.name = name
+        self.code = code
         self.total_accepted = total_accepted
         self.disabled_accepted = disabled_accepted
         self.basic_level_amount = basic_level_amount
